@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "小马快跑"
+    },
+    {
+      "name": "vendor_name",
+      "value": "小马快跑"
+    },
+    {
+      "name": "app_description",
+      "value": "小马快跑"
+    }
+  ]
+}

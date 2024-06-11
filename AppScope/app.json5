@@ -1,0 +1,19 @@
+//应用全局配置信息
+{
+  "app": {
+    "bundleName": "com.existmg.runfastxm",//包名，全局唯一，必须
+    "bundleType": "app",//应用类型 app or atomicService,不设置的话默认为app
+   // "debug": false,//编译构建自动生成，表示是否可以调试，不设置的话默认为false
+    "icon": "$media:app_icon",//应用图标，必须
+    "label": "$string:app_name",//应用名称，必须
+    "description": "$string:app_description",//应用描述，不设置的话默认为空
+    "vendor": "$string:vendor_name",//应用开发厂商，不设置的话默认为空
+    "versionCode": 1000000,//应用版本号，必须
+    "versionName": "1.0.0",//应用版本号String，必须
+    "minCompatibleVersionCode": 1000000,//可兼容的最低版本，不设置的话默认等于versionCode
+    //"minAPIVersion":7,//由build-profile.json5中的compatibleSdkVersion生成
+    //"targetAPIVersion":7,//由build-profile.json5中的compatibleSdkVersion生成
+    "multiProjects": false,//标识当前工程是否支持多个工程的联合开发，不设置的话默认为false
+    //剩余参数是对于跨平台的兼容支持字段，如果有需求可以前往官方文档查看
+  }
+}

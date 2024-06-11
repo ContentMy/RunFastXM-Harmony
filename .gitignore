@@ -1,0 +1,54 @@
+
+/.hvigor
+.cxx
+/.clangd
+/.clang-format
+/.clang-tidy
+**/.test
+
+# 忽略编译生成的文件
+/out/
+/.gradle/
+/.idea/
+/.vscode/
+
+# 忽略临时文件和缓存文件
+*.tmp
+*.bak
+*.log
+
+# 忽略敏感信息
+*.keystore
+*.jks
+*.pem
+*.p12
+*.key
+
+# 忽略运行时环境和依赖库
+/node_modules/
+/oh_modules
+/vendor/
+/build/
+/libs/
+**/build
+
+# 忽略操作系统自动生成的文件
+.DS_Store
+Thumbs.db
+
+# 忽略个人 IDE 配置文件
+/.settings/
+*.iml
+*.ipr
+*.iws
+
+# 忽略本地配置文件
+/local.properties
+*.properties
+*.config
+
+# 忽略构建生成的文件
+.gradle/
+
+# 忽略其他系统或应用生成的临时文件
+*.swp
