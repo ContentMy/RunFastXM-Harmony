@@ -10,6 +10,9 @@
 
 Kotlin版本：https://github.com/ContentMy/RunFastXM
 
+#### 分支
+dev分支：https://github.com/ContentMy/RunFastXM-Harmony/tree/dev
+
 #### 应用快照
 
   <img src="screenshot/提醒列表.jpg" alt="提醒列表" width="300"/><img src="screenshot/目标列表.jpg" alt="目标列表" width="300"/> <img src="screenshot/记录生活.jpg" alt="记录生活" width="300"/> <img src="screenshot/个人设置.jpg" alt="个人设置" width="300"/>
