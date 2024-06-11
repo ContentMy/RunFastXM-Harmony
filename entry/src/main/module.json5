@@ -1,0 +1,74 @@
+/*
+src > main > ets：用于存放ArkTS源码。
+src > main > ets > entryability：应用/服务的入口。
+src > main > ets > pages：应用/服务包含的页面。
+src > main > resources：用于存放应用/服务所用到的资源文件，如图形、多媒体、字符串、布局文件等。关于资源文件，详见资源分类与访问。
+src > main > module.json5：Stage模型模块配置文件。主要包含HAP包的配置信息、应用/服务在具体设备上的配置信息以及应用/服务的全局配置信息。具体的配置文件说明，详见module.json5配置文件。
+build-profile.json5：当前的模块信息、编译信息配置项，包括buildOption、targets配置等。其中targets中可配置当前运行环境，默认为HarmonyOS。
+hvigorfile.ts：模块级编译构建任务脚本，开发者可以自定义相关任务和代码实现。
+*/
+{
+  "module": {
+    "name": "entry",//标识当前module的名称，必须，仅英文
+    "type": "entry",//标识当前module的类型，必须，entry为主模块，有且仅有一个，feature为应用动态特性模块，可以按需加载，har为静态共享包模块，shared为动态共享包模块
+    "description": "$string:module_desc",//标识当前Module的描述信息，默认为空
+    //"process": "",//进程名，默认为app.json5下的bundleName
+    "mainElement": "EntryAbility",//标识当前Module的入口UIAbility名称或者ExtensionAbility名称,默认为空
+    "deviceTypes": [//标识当前Module可以运行在哪类设备上，标签值采用字符串数组的表示，必须
+      "phone",
+      "tablet"
+    ],
+    "deliveryWithInstall": true,//标识当前Module是否在用户主动安装的时候安装，表示该Module对应的HAP是否跟随应用一起安装，必须
+    "installationFree": false,//标识当前Module是否支持免安装特性，必须
+    "pages": "$profile:main_pages",//标识当前Module的profile资源，用于列举每个页面信息，在有UI的场景的下必须配置，
+        //通过profile下的资源文件配置
+        //src描述当前Module中所有页面的路由信息，包括页面路径和页面名称。该值是一个字符串数组，其中每个元素表示一个页面
+        //window用于定义与显示窗口相关的配置,默认为空
+    //"virtualMachine": "ark",//标识当前Module运行的目标虚拟机类型，供云端分发使用，如应用市场和分发中心。该标签值为字符串。如果目标虚拟机类型为ArkTS引擎，则其值为“ark+版本号”。构建时自动生成
+    //"metadata": [{//标识当前Module的自定义元信息，标签值为数组类型，只对当前Module、UIAbility、ExtensionAbility生效，默认为空
+    //      "name": "module_metadata",//该标签标识数据项的键名称，字符串类型，默认为空
+    //      "value": "a test demo for module metadata",//该标签标识数据项的值，标签值为字符串，默认为空
+    //      "resource": "$profile:shortcuts_config",//标签标识定义用户自定义数据格式，标签值为标识该数据的资源的索引值，默认为空
+    //    }]
+    "abilities": [//标识当前Module中UIAbility的配置信息，标签值为数组类型，只对当前UIAbility生效，默认为空
+      {
+        "name": "EntryAbility",//标识当前UIAbility组件的名称，该名称在整个应用要唯一,必须
+        "srcEntry": "./ets/entryability/EntryAbility.ts",//该标签标识入口UIAbility的代码路径，必须
+        "launchType": "singleton",//启动模式，singleton单实例，multiton多实例，specified指定示例，默认为单实例
+        "description": "$string:EntryAbility_desc",//标识当前UIAbility组件的描述信息，默认为空
+        "icon": "$media:app_icon",//标识当前UIAbility组件的图标，默认为空，如果UIAbility被配置为MainElement，该标签必须配置
+        "label": "$string:app_name",//标识当前UIAbility组件对用户显示的名称，必须
+        //"permissions":[],//标识当前UIAbility组件自定义的权限信息,默认为空
+        "startWindowIcon": "$media:icon",//标识当前UIAbility组件启动页面图标资源文件的索引，必须
+        "startWindowBackground": "$color:start_window_background",//标识当前UIAbility组件启动页面背景颜色资源文件的索引，必须
+        "exported": true,//标识当前UIAbility组件是否可以被其他应用调用，默认为false
+        "continuable": false,//标识当前UIAbility组件是否可以迁移，默认为false
+        "skills": [//标识当前UIAbility组件或ExtensionAbility组件能够接收的Want的特征集，为数组格式。默认为空
+          {
+            "entities": [//
+              "entity.system.home"
+            ],
+            "actions": [//
+              "action.system.home"
+            ]
+          }
+        ],
+        //"backgroundModes":[],//标识当前UIAbility组件的长时任务集合。默认为空
+        //"removeMissionAfterTerminate":false,//标识当前UIAbility组件销毁后是否从任务列表中移除任务，默认为false
+        //"metadata": [{//标识当前UIAbility组件的元信息,默认为空
+        //        "name": "ability_metadata",
+        //        "value": "a test demo for ability",
+        //        "resource": "$profile:config_file"
+        //      },
+        //      {
+        //        "name": "ability_metadata_2",
+        //        "value": "a string test",
+        //        "resource": "$profile:config_file"
+        //      }],
+      }
+    ],
+    //"extensionAbilities":[]//标识当前Module中ExtensionAbility的配置信息，标签值为数组类型，只对当前ExtensionAbility生效，默认为空
+    //"requestPermissions":[]//标识当前应用运行时需向系统申请的权限集合,默认为空
+    //"testRunner":[]//标识当前Module用于支持对测试框架的配置，默认为空
+  }
+}
