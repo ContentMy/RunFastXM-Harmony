@@ -11,6 +11,23 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "user_about_desc",
+      "value": "关于小马快跑"
+    },
+    {
+      "name": "user_privacy_desc",
+      "value": "隐私政策与用户协议"
+    },
+    {
+      "name": "user_information_desc",
+      "value": "使用说明"
+    },
+    {
+      "name": "user_remind_setting_desc",
+      "value": "提醒设置"
     }
+
   ]
 }

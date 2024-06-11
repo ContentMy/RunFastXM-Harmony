@@ -11,6 +11,22 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "user_about_desc",
+      "value": "aboutApplication"
+    },
+    {
+      "name": "user_privacy_desc",
+      "value": "privacy"
+    },
+    {
+      "name": "user_information_desc",
+      "value": "information"
+    },
+    {
+      "name": "user_remind_setting_desc",
+      "value": "remindSetting"
     }
   ]
 }
