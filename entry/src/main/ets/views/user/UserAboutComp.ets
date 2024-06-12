@@ -7,13 +7,18 @@ export struct UserAboutComp{
   @State versionName:string = ''
   async onInit(){
     bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION).then((bundleInfo)=>{
-      let versionName = bundleInfo.versionName;//应用版本名
+      let versionName =  bundleInfo.versionName;//应用版本名
+      console.log("versionName为："+versionName)
       let versionNo = bundleInfo.versionCode;//应用版本号
       this.versionName = versionName
     })
     //   .catch((error:BusinessError )=>{
     //   console.error("get bundleInfo failed,error is "+error)
     // })
+  }
+
+  onPageShow(){
+    this.onInit()
   }
 
   build(){
@@ -52,7 +57,7 @@ export struct UserAboutComp{
         .fontSize(25)
         .margin({top:10})
         .fontWeight(FontWeight.Bold)
-      Text(this.versionName)
+      Text('测试版 v' + this.versionName)
         .fontColor($r('app.color.colorWhite'))
         .fontSize(20)
         .margin({top:10})
