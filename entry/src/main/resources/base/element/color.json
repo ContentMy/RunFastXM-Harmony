@@ -17,6 +17,10 @@
       "value": "#979797"
     },
     {
+      "name": "colorGrayLight",
+      "value": "#EDEDED"
+    },
+    {
       "name": "colorGreen",
       "value": "#029F72"
     },

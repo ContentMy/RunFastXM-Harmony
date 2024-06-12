@@ -1,10 +1,11 @@
 
+import router from '@ohos.router'
 import { RemindDialog } from '../dialogs/RemindDialog'
 @Component
 @Preview
 export struct RemindComp{
   @State title: string = '提醒列表'
-  @State isShowDefaultText:boolean = true
+  @State isShowDefaultText:boolean = false
   @State arr: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   @State editFlag: boolean = false
   @State textValue: string = ''
@@ -39,11 +40,13 @@ export struct RemindComp{
     console.log('点击外部收到了回调');
   }
 
-  onPageShow(){
+  onPageShow(){//TODO：因为隶属于TabContent的组件而不是单独的page，所以这个回调不会生效，先将标志位改为false，后续优化此处逻辑时，在进行处理
     if (this.arr.length > 0) {
+      console.log('更新占位标识')
       this.isShowDefaultText = false
     }
   }
+
   build(){
     Stack({alignContent:Alignment.BottomEnd}){
       Column() {
@@ -60,6 +63,17 @@ export struct RemindComp{
             .height(50)
             .padding(10)
             .margin({right:10})
+            .onClick(()=>{
+              router.pushUrl({
+                url: 'pages/remind/RemindCompleted' // 目标url
+              }, router.RouterMode.Standard, (err) => {
+                if (err) {
+                  console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+                  return;
+                }
+                console.info('Invoke pushUrl succeeded.')
+              })
+            })
         }
         .width('100%')
         .height(50)

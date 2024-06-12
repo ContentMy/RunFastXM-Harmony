@@ -3,6 +3,7 @@
     "pages/Index",
     "pages/user/UserAbout",
     "pages/user/UserPrivacy",
-    "pages/user/UserInformation"
+    "pages/user/UserInformation",
+    "pages/remind/RemindCompleted"
   ]
 }

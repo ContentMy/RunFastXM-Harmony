@@ -1,4 +1,5 @@
 import bundleManager from '@ohos.bundle.bundleManager';
+import router from '@ohos.router';
 // import { BusinessError } from '@ohos.base';
 @Component
 @Preview
@@ -31,6 +32,9 @@ struct UserAbout{
           .width(50)
           .height(50)
           .padding(15)
+          .onClick(()=>{
+            router.back()
+          })
         Text($r('app.string.user_about_desc'))
           .fontColor($r('app.color.colorWhite'))
           .fontSize(16)

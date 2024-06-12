@@ -1,3 +1,4 @@
+import router from '@ohos.router'
 @Entry
 @Component
 @Preview
@@ -12,6 +13,9 @@ struct UserInformation {
           .width(50)
           .height(50)
           .padding(15)
+          .onClick(()=>{
+            router.back()
+          })
         Text($r('app.string.user_information_desc'))
           .fontColor($r('app.color.colorBlack'))
           .fontSize(16)

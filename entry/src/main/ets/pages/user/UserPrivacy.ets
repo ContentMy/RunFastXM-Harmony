@@ -1,3 +1,4 @@
+import router from '@ohos.router'
 @Entry
 @Component
 @Preview
@@ -11,6 +12,9 @@ struct UserPrivacy{
           .width(50)
           .height(50)
           .padding(15)
+          .onClick(()=>{
+            router.back()
+          })
         Text($r('app.string.user_privacy_desc'))
           .fontColor($r('app.color.colorBlack'))
           .fontSize(16)
