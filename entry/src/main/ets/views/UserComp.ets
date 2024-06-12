@@ -1,5 +1,3 @@
-
-import { UserAboutComp } from './user/UserAboutComp'
 import router from '@ohos.router';
 @Component
 @Preview
@@ -55,7 +53,7 @@ export struct UserComp{
           // + event.target.area.globalPosition.x + ',' + event.target.area.globalPosition.y + ')\n  width:'
           // + event.target.area.width + '\n  height:' + event.target.area.height + '\ntimestamp' + event.timestamp;
           router.pushUrl({
-            url: 'views/user/UserAboutComp' // 目标url
+            url: 'pages/user/UserAbout' // 目标url
           }, router.RouterMode.Standard, (err) => {
             if (err) {
               console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
@@ -77,6 +75,17 @@ export struct UserComp{
         .width('100%')
         .height(50)
         .margin({top:10})
+        .onClick((event:ClickEvent)=>{
+          router.pushUrl({
+            url: 'pages/user/UserPrivacy' // 目标url
+          }, router.RouterMode.Standard, (err) => {
+            if (err) {
+              console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+              return;
+            }
+            console.info('Invoke pushUrl succeeded.')
+          })
+        })
 
         Row(){
           Image($r('app.media.ui_small_icon_remind'))
@@ -103,6 +112,7 @@ export struct UserComp{
         .width('100%')
         .height(50)
         .margin({top:10})
+        .visibility(Visibility.None)
 
 
       }

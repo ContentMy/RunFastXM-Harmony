@@ -1,6 +1,8 @@
 {
   "src": [
     "pages/Index",
-    "views/user/UserAboutComp"
+    "pages/user/UserAbout",
+    "pages/user/UserPrivacy",
+    "pages/user/UserInformation"
   ]
 }

@@ -27,6 +27,18 @@
     {
       "name": "user_remind_setting_desc",
       "value": "提醒设置"
+    },
+    {
+      "name": "user_information_remind_desc",
+      "value": "提醒功能使用说明"
+    },
+    {
+      "name": "user_information_target_desc",
+      "value": "目标功能使用说明"
+    },
+    {
+      "name": "user_information_memorandum_desc",
+      "value": "记录生活功能使用说明"
     }
   ]
 }

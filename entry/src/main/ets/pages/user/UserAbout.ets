@@ -3,7 +3,7 @@ import bundleManager from '@ohos.bundle.bundleManager';
 @Component
 @Preview
 @Entry
-export struct UserAboutComp{
+struct UserAbout{
   @State versionName:string = ''
   async onInit(){
     bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION).then((bundleInfo)=>{

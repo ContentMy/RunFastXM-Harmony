@@ -27,6 +27,18 @@
     {
       "name": "user_remind_setting_desc",
       "value": "remindSetting"
+    },
+    {
+      "name": "user_information_remind_desc",
+      "value": "remindInformation"
+    },
+    {
+      "name": "user_information_target_desc",
+      "value": "targetInformation"
+    },
+    {
+      "name": "user_information_memorandum_desc",
+      "value": "memorandumInformation"
     }
   ]
 }
