@@ -39,7 +39,18 @@
     {
       "name": "user_remind_setting_desc",
       "value": "提醒设置"
+    },
+    {
+      "name": "remind_default_desc",
+      "value": "再也不怕忘掉啦~\n点击\"+\"添加提醒吧！"
+    },
+    {
+      "name": "remind_completed_default_desc",
+      "value": "还没有已完成的提醒哦，快去添加提醒吧！"
+    },
+    {
+      "name": "remind_completed_title_desc",
+      "value": "已完成提醒"
     }
-
   ]
 }

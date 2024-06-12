@@ -39,6 +39,18 @@
     {
       "name": "user_information_memorandum_desc",
       "value": "memorandumInformation"
+    },
+    {
+      "name": "remind_default_desc",
+      "value": "Don‘t worry forget~\nClick\"+\" add Reminder！"
+    },
+    {
+      "name": "remind_completed_default_desc",
+      "value": "There are no completed reminders here，Please add reminder"
+    },
+    {
+      "name": "remind_completed_title_desc",
+      "value": "Completed Reminders"
     }
   ]
 }
