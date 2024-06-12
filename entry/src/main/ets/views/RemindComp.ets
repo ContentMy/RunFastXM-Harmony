@@ -1,3 +1,5 @@
+
+import { RemindDialog } from '../dialogs/RemindDialog'
 @Component
 @Preview
 export struct RemindComp{
@@ -5,6 +7,37 @@ export struct RemindComp{
   @State isShowDefaultText:boolean = true
   @State arr: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   @State editFlag: boolean = false
+  @State textValue: string = ''
+  @State inputValue: string = ''
+  dialogController: CustomDialogController = new CustomDialogController({
+    builder: RemindDialog({
+      cancel: this.onCancel,
+      confirm: this.onAccept,
+      textValue: $textValue,
+      inputValue: $inputValue
+    }),
+    cancel: this.exitApp,
+    autoCancel: true,
+    alignment: DialogAlignment.Bottom,
+    gridCount: 4,
+    customStyle: true
+  })
+
+  aboutToDisappear(){
+    this.dialogController = null // 将dialogController置空
+  }
+
+  onCancel(){
+    console.log('取消收到了回调');
+  }
+
+  onAccept(){
+    console.log('外层收到了回调');
+  }
+
+  exitApp(){
+    console.log('点击外部收到了回调');
+  }
 
   onPageShow(){
     if (this.arr.length > 0) {
@@ -92,7 +125,7 @@ export struct RemindComp{
       .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:2,offsetY:2})
       .onClick(()=>{
         /*点击+号按钮进行提醒的添加*/
-
+        this.dialogController.open()
       })
       /*外层的tabs目前版本没有开放divider，所以在每个组件页面的底部增加一个divider*/
       Divider().strokeWidth(0.5).color($r('app.color.colorGray'))
