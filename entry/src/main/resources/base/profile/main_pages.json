@@ -4,6 +4,7 @@
     "pages/user/UserAbout",
     "pages/user/UserPrivacy",
     "pages/user/UserInformation",
-    "pages/remind/RemindCompleted"
+    "pages/remind/RemindCompleted",
+    "pages/target/TargetCreate"
   ]
 }

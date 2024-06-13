@@ -55,6 +55,46 @@
     {
       "name": "target_default_desc",
       "value": "go ahead and get started~\nClick\"+\"add your target！"
+    },
+    {
+      "name": "target_create_title_new_desc",
+      "value": "Create New Target"
+    },
+    {
+      "name": "target_create_title_edit_desc",
+      "value": "Edit Target"
+    },
+    {
+      "name": "target_create_title_default_desc",
+      "value": "Please Enter the Name of the Target"
+    },
+    {
+      "name": "target_create_icon_desc",
+      "value": "Please Choose the Icon for the Target："
+    },
+    {
+      "name": "target_create_start_time_desc",
+      "value": "Target Start Time："
+    },
+    {
+      "name": "target_create_end_time_desc",
+      "value": " Target End Time："
+    },
+    {
+      "name": "target_create_state_desc",
+      "value": "Target Status："
+    },
+    {
+      "name": "target_create_content_desc",
+      "value": "Say Something to Yourself："
+    },
+    {
+      "name": "target_create_content_default_desc",
+      "value": "Let's start taking action now！"
+    },
+    {
+      "name": "save_desc",
+      "value": "Save"
     }
   ]
 }

@@ -1,4 +1,5 @@
 
+import router from '@ohos.router'
 @Component
 @Preview
 export struct TargetComp{
@@ -98,7 +99,17 @@ export struct TargetComp{
         Image($r('app.media.base_add')).width(20).height(20).align(Alignment.Center)
       }.width(55).height(55).backgroundColor($r('app.color.colorGreen')).margin(20)
       .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:2,offsetY:2})
-
+      .onClick((event:ClickEvent)=>{
+        router.pushUrl({
+          url: 'pages/target/TargetCreate' // 目标url
+        }, router.RouterMode.Standard, (err) => {
+          if (err) {
+            console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+            return;
+          }
+          console.info('Invoke pushUrl succeeded.')
+        })
+      })
       /*外层的tabs目前版本没有开放divider，所以在每个组件页面的底部增加一个divider*/
       Divider().strokeWidth(0.5).color($r('app.color.colorGray'))
     }.width('100%')//宽度占满屏幕

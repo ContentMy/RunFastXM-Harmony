@@ -55,6 +55,46 @@
     {
       "name": "target_default_desc",
       "value": "种下一棵树最好的时间是十年前，其次是现在~\n所以赶快点击\"+\"添加你的目标吧！"
+    },
+    {
+      "name": "target_create_title_new_desc",
+      "value": "新建目标"
+    },
+    {
+      "name": "target_create_title_edit_desc",
+      "value": "编辑目标"
+    },
+    {
+      "name": "target_create_title_default_desc",
+      "value": "请输入目标的名称"
+    },
+    {
+      "name": "target_create_icon_desc",
+      "value": "请挑选目标的图标："
+    },
+    {
+      "name": "target_create_start_time_desc",
+      "value": "目标开始时间："
+    },
+    {
+      "name": "target_create_end_time_desc",
+      "value": "目标结束时间："
+    },
+    {
+      "name": "target_create_state_desc",
+      "value": "目标状态："
+    },
+    {
+      "name": "target_create_content_desc",
+      "value": "对自己说一些什么吧："
+    },
+    {
+      "name": "target_create_content_default_desc",
+      "value": "小马快跑"
+    },
+    {
+      "name": "save_desc",
+      "value": "保存"
     }
   ]
 }
