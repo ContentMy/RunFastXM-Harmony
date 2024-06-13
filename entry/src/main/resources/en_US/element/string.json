@@ -51,6 +51,10 @@
     {
       "name": "remind_completed_title_desc",
       "value": "Completed Reminders"
+    },
+    {
+      "name": "target_default_desc",
+      "value": "go ahead and get started~\nClick\"+\"add your target！"
     }
   ]
 }

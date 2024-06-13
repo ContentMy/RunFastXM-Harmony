@@ -51,6 +51,10 @@
     {
       "name": "remind_completed_title_desc",
       "value": "已完成提醒"
+    },
+    {
+      "name": "target_default_desc",
+      "value": "种下一棵树最好的时间是十年前，其次是现在~\n所以赶快点击\"+\"添加你的目标吧！"
     }
   ]
 }
