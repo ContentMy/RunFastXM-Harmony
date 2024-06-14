@@ -95,6 +95,26 @@
     {
       "name": "save_desc",
       "value": "Save"
+    },
+    {
+      "name": "memorandum_default_desc",
+      "value": "There are no life records here yet~\\nClick on the input box above to write down your life records!"
+    },
+    {
+      "name": "memorandum_input_default_desc",
+      "value": "Record your feelings today"
+    },
+    {
+      "name": "memorandum_content_desc",
+      "value": "Record the details："
+    },
+    {
+      "name": "memorandum_content_default_desc",
+      "value": "I want to say..."
+    },
+    {
+      "name": "memorandum_resource_img_desc",
+      "value": "Choose the picture you want to add："
     }
   ]
 }

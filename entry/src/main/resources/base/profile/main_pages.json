@@ -5,6 +5,8 @@
     "pages/user/UserPrivacy",
     "pages/user/UserInformation",
     "pages/remind/RemindCompleted",
-    "pages/target/TargetCreate"
+    "pages/target/TargetCreate",
+    "pages/memorandum/MemorandumCreate",
+    "pages/memorandum/MemorandumDetail"
   ]
 }

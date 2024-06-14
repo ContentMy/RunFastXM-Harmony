@@ -95,6 +95,26 @@
     {
       "name": "save_desc",
       "value": "保存"
+    },
+    {
+      "name": "memorandum_default_desc",
+      "value": "这里还没有生活记录哦~\\n点击上面的输入框写下你的生活记录吧！"
+    },
+    {
+      "name": "memorandum_input_default_desc",
+      "value": "记录一下今天的心情吧"
+    },
+    {
+      "name": "memorandum_content_desc",
+      "value": "记录一下详细内容吧："
+    },
+    {
+      "name": "memorandum_content_default_desc",
+      "value": "我还想说..."
+    },
+    {
+      "name": "memorandum_resource_img_desc",
+      "value": "选择想要添加的图片吧："
     }
   ]
 }
