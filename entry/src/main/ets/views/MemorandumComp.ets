@@ -109,7 +109,17 @@ export struct MemorandumComp{
                       .width('95%')
                       .height('95%')
                       .borderRadius(10)
-                    }.layoutWeight(1)
+                    }.layoutWeight(1).onClick(()=>{
+                      router.pushUrl({
+                        url: 'pages/memorandum/MemorandumDetail' // 目标url
+                      }, router.RouterMode.Standard, (err) => {
+                        if (err) {
+                          console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+                          return;
+                        }
+                        console.info('Invoke pushUrl succeeded.')
+                      })
+                    })
                   }
                 }
               }

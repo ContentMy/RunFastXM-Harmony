@@ -115,6 +115,14 @@
     {
       "name": "memorandum_resource_img_desc",
       "value": "选择想要添加的图片吧："
+    },
+    {
+      "name": "memorandum_create_desc",
+      "value": "新建记录"
+    },
+    {
+      "name": "memorandum_detail_desc",
+      "value": "记录详情"
     }
   ]
 }

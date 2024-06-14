@@ -115,6 +115,14 @@
     {
       "name": "memorandum_resource_img_desc",
       "value": "Choose the picture you want to add："
+    },
+    {
+      "name": "memorandum_create_desc",
+      "value": "New record"
+    },
+    {
+      "name": "memorandum_detail_desc",
+      "value": "Record details"
     }
   ]
 }
