@@ -7,6 +7,7 @@
     "pages/remind/RemindCompleted",
     "pages/target/TargetCreate",
     "pages/memorandum/MemorandumCreate",
-    "pages/memorandum/MemorandumDetail"
+    "pages/memorandum/MemorandumDetail",
+    "pages/remind/RemindDetail"
   ]
 }
