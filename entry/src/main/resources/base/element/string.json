@@ -123,6 +123,34 @@
     {
       "name": "memorandum_detail_desc",
       "value": "记录详情"
+    },
+    {
+      "name": "guide_remind_desc",
+      "value": "即时提醒"
+    },
+    {
+      "name": "guide_remind_content_desc",
+      "value": "不再担心忙于其他事错过时间\n也不用烦恼扭头忘记了想要做的事情\n想做什么先把它记录下来，我来为您提醒"
+    },
+    {
+      "name": "guide_target_desc",
+      "value": "制定目标"
+    },
+    {
+      "name": "guide_target_content_desc",
+      "value": "突然没有什么目标和计划心里很慌\n又或者有想做的目标和计划总是偷懒\n让小马为你记录你的目标，每天打卡坚持吧"
+    },
+    {
+      "name": "guide_memorandum_desc",
+      "value": "记录生活"
+    },
+    {
+      "name": "guide_memorandum_content_desc",
+      "value": "生活总有美好的瞬间值得我们记录下来\n文字、心情、图片，记录生活的形式多种多样\n偶尔回过头看看，也是蛮不错的喔"
+    },
+    {
+      "name": "guide_start_desc",
+      "value": "开始"
     }
   ]
 }
