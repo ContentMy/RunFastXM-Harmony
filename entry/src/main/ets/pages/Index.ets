@@ -3,10 +3,10 @@
 import mediaquery from '@ohos.mediaquery'
 import router from '@ohos.router';
 // import promptAction from
-import { TabBarItems } from '../contants'
-import { BasicConstant } from '../contants/BasicConstant'
+import { TabBarItems } from '../common/contants'
+import { CommonConstants } from '../common/contants/CommonConstants'
 import { TabBarModel } from '../models/TabBarModel'
-import { themeManager } from '../utils/themeManager'
+import { themeManager } from '../common/utils/themeManager'
 import { MemorandumComp } from '../views/MemorandumComp'
 import { RemindComp } from '../views/RemindComp'
 import { TargetComp } from '../views/TargetComp'
@@ -43,7 +43,7 @@ struct Index {//
 
   @Builder
   TabBarBuilder(item: TabBarModel, index: number) {//用于设置底部导航栏的样式
-    Column({ space: BasicConstant.SPACE_SM }) {
+    Column({ space: CommonConstants.SPACE_SM }) {
       Image(this.activeIndex === index ? item.activeIcon : item.defaultIcon)
         .width($r('app.float.tab_bar_item_icon_size'))
       Text(item.label)

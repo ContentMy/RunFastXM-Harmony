@@ -1,4 +1,4 @@
-import { TabBarModel } from '../models/TabBarModel'
+import { TabBarModel } from '../../models/TabBarModel'
 
 export const TabBarItems: TabBarModel[] = [
   {
