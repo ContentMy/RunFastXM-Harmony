@@ -151,6 +151,34 @@
     {
       "name": "guide_memorandum_content_desc",
       "value": "Life always has beautiful moments worth recording.\nWhether it's words, emotions, or pictures, there are many ways to document life.\nOccasionally looking back at them can be quite nice, too."
+    },
+    {
+      "name": "main_page_title_remind_desc",
+      "value": "Reminder List"
+    },
+    {
+      "name": "main_page_title_target_desc",
+      "value": "Goal List"
+    },
+    {
+      "name": "main_page_title_memorandum_desc",
+      "value": "Life Log"
+    },
+    {
+      "name": "main_page_title_user_desc",
+      "value": "Personal Settings"
+    },
+    {
+      "name": "remind_create_title_null_desc",
+      "value": "Remind title can't be null"
+    },
+    {
+      "name": "remind_create_title_default_desc",
+      "value": "Please enter the items you want to be reminded about"
+    },
+    {
+      "name": "remind_create_time_prompt_desc",
+      "value": "Please select a reminder time:"
     }
   ]
 }

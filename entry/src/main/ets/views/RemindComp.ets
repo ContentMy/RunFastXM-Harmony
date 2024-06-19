@@ -1,50 +1,62 @@
 
 import router from '@ohos.router'
+import { CommonConstants } from '../common/contants/CommonConstants'
+import RemindData from '../common/database/data/RemindData'
+import RemindTable from '../common/database/tables/RemindTable'
+import { logger } from '../common/utils/logger'
 import { RemindDialog } from '../dialogs/RemindDialog'
 @Component
 @Preview
 export struct RemindComp{
-  @State title: string = '提醒列表'
-  @State isShowDefaultText:boolean = false
-  @State arr: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-  @State editFlag: boolean = false
-  @State textValue: string = ''
-  @State inputValue: string = ''
+  @State mList:Array<RemindData> = []
+  @State mRemindData:RemindData = {id:0,remindImg:'',remindTitle:'',remindContent:'',remindTime:0,remindStartTime:0,remindEndTime:0,remindCompleteStatus:false}
+  private RemindTable = new RemindTable(() => {});
   dialogController: CustomDialogController = new CustomDialogController({
     builder: RemindDialog({
-      cancel: this.onCancel,
-      confirm: this.onAccept,
-      textValue: $textValue,
-      inputValue: $inputValue
+      mRemindData: $mRemindData,
+      confirm: (remindData: RemindData) => this.onAccept(remindData)
     }),
-    cancel: this.exitApp,
+    cancel: this.outSideClick,
     autoCancel: true,
     alignment: DialogAlignment.Bottom,
     gridCount: 4,
     customStyle: true
   })
 
+  aboutToAppear(){
+    this.RemindTable.getRdbStore(() => {
+      this.RemindTable.query(0, (result: RemindData[]) => {
+        this.mList = result;
+      }, true);
+    });
+  }
+
   aboutToDisappear(){
     this.dialogController = null // 将dialogController置空
   }
 
-  onCancel(){
-    console.log('取消收到了回调');
+  /**
+   * @Author: ContentMy
+   * @params: remindData 返回的Remind数据
+   * @Description: 这里是点击确认后关闭dialog返回的包含有效数据的RemindData，对数据进行入库操作以及加入到缓存中
+   */
+  onAccept(remindData: RemindData){
+    logger.info(`${CommonConstants.INDEX_TAG}`, `The remindData inserted is:  ${JSON.stringify(remindData)}`);
+    this.RemindTable.insertData(remindData, (id: number) => {
+      remindData.id = id;// 将数据库生成的自增 ID 赋值给 remindData 对象的 id 属性
+      this.mList.push(remindData)//数据加入当前页面的缓存
+    });
   }
 
-  onAccept(){
-    console.log('外层收到了回调');
-  }
-
-  exitApp(){
+  outSideClick(){
     console.log('点击外部收到了回调');
   }
 
   onPageShow(){//TODO：因为隶属于TabContent的组件而不是单独的page，所以这个回调不会生效，先将标志位改为false，后续优化此处逻辑时，在进行处理
-    if (this.arr.length > 0) {
-      console.log('更新占位标识')
-      this.isShowDefaultText = false
-    }
+    // if (this.arr.length > 0) {
+    //   console.log('更新占位标识')
+    //   this.isShowDefaultText = false
+    // }
   }
 
   build(){
@@ -52,7 +64,7 @@ export struct RemindComp{
       Column() {
         /*这部分是顶部标题和menu的布局*/
         Row(){
-          Text(this.title)
+          Text($r('app.string.remind_completed_title_desc'))
             .fontColor($r('app.color.colorBlack'))
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
@@ -84,7 +96,7 @@ export struct RemindComp{
           /*这部分是展示的列表内容*/
           List({space:20, initialIndex:0}) {//item的间隔，起始索引值
             //数据源，item和下标
-            ForEach(this.arr, (item, index) => {
+            ForEach(this.mList, (item:RemindData, index) => {
               ListItem() {
                 //布局方向，item对齐方式
                 Flex({direction: FlexDirection.Row, alignItems: ItemAlign.Center}) {
@@ -93,22 +105,11 @@ export struct RemindComp{
                     .height(50)
                     .padding(8)
                     .margin({left:10})
-                  Text('' + item)
+                  Text(item.remindTitle)
                     .fontSize(20)
                     .textAlign(TextAlign.Center)
                     .flexShrink(1)
                     .margin({left:10})
-                  if (this.editFlag) {
-                    Button() {
-                      Text("delete").fontSize(16)
-                    }.width('30%').height(40)
-                    .onClick(() => {
-                      console.info(this.arr[index] + 'Delete')
-                      this.arr.splice(index, 1)
-                      console.info(JSON.stringify(this.arr))
-                      this.editFlag = false
-                    }).stateEffect(true)
-                  }
                 }
               }
               .height(80)
@@ -120,12 +121,12 @@ export struct RemindComp{
               .margin({left:20,right:20})
 
             }, item => item)
-          }.width('100%')
+          }.width('100%').height('100%')
           /*这部分是没有列表数据时的默认占位内容*/
           Text($r('app.string.remind_default_desc'))
             .fontColor($r('app.color.colorGreen'))
             .textAlign(TextAlign.Center)
-            .visibility(this.isShowDefaultText ? Visibility.Visible : Visibility.None)
+            .visibility(this.mList.length == 0 ? Visibility.Visible : Visibility.None)
         }
         .width('100%')//宽度占满屏幕
         .height('100%')

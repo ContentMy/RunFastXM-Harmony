@@ -151,6 +151,34 @@
     {
       "name": "guide_start_desc",
       "value": "开始"
+    },
+    {
+      "name": "main_page_title_remind_desc",
+      "value": "提醒列表"
+    },
+    {
+      "name": "main_page_title_target_desc",
+      "value": "目标列表"
+    },
+    {
+      "name": "main_page_title_memorandum_desc",
+      "value": "记录生活"
+    },
+    {
+      "name": "main_page_title_user_desc",
+      "value": "个人设置"
+    },
+    {
+      "name": "remind_create_title_default_desc",
+      "value": "请输入想要提醒的事项"
+    },
+    {
+      "name": "remind_create_title_null_desc",
+      "value": "输入想要提醒的事项后再确认哦"
+    },
+    {
+      "name": "remind_create_time_prompt_desc",
+      "value": "请选择提醒时间:"
     }
   ]
 }

@@ -23,14 +23,14 @@ export default class RemindTable{
   }
 
   deleteData(remind: RemindData, callback: Function) {
-    let predicates = new relationalStore.RdbPredicates(CommonConstants.ACCOUNT_TABLE.tableName);
+    let predicates = new relationalStore.RdbPredicates(CommonConstants.REMIND_TABLE.tableName);
     predicates.equalTo('id', remind.id);
     this.accountTable.deleteData(predicates, callback);
   }
 
   updateData(remind: RemindData, callback: Function) {
-    const valueBucket: relationalStore.ValuesBucket = generateBucket(account);
-    let predicates = new relationalStore.RdbPredicates(CommonConstants.ACCOUNT_TABLE.tableName);
+    const valueBucket: relationalStore.ValuesBucket = generateBucket(remind);
+    let predicates = new relationalStore.RdbPredicates(CommonConstants.REMIND_TABLE.tableName);
     predicates.equalTo('id', remind.id);
     this.accountTable.updateData(predicates, valueBucket, callback);
   }
