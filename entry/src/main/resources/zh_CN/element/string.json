@@ -183,6 +183,10 @@
     {
       "name": "target_create_title_null_desc",
       "value": "目标名称不能为空"
+    },
+    {
+      "name": "memorandum_create_title_null_desc",
+      "value": "记录下心情才能保存哦"
     }
   ]
 }

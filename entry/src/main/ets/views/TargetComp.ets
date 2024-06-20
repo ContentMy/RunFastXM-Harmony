@@ -14,6 +14,7 @@ export struct TargetComp{
 
   aboutToAppear(){//TODO:从目标新建页面返回时，这个回调不会被调用
     PageEventBus.getInstance().subscribe('refreshTargetComp', this.refreshPage.bind(this));
+    this.refreshPage()
   }
 
   aboutToDisappear(){

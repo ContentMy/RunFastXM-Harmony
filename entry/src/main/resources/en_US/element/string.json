@@ -183,6 +183,10 @@
     {
       "name": "target_create_title_null_desc",
       "value": "The goal name cannot be empty"
+    },
+    {
+      "name": "memorandum_create_title_null_desc",
+      "value": "You need to record your feeling to save it"
     }
   ]
 }

@@ -11,6 +11,7 @@ export class CommonConstants {
   static readonly RUN_FAST_XM_DB_TAG = '[Debug.run.fast.xm]';
   static readonly REMIND_TABLE_TAG = '[Debug.RemindTable]';
   static readonly TARGET_TABLE_TAG = '[Debug.TargetTable]';
+  static readonly MEMORANDUM_TABLE_TAG = '[Debug.MemorandumTable]';
   static readonly INDEX_TAG = '[Debug.Index]';
 
   /**
@@ -33,7 +34,7 @@ export class CommonConstants {
   };
 
   /**
-   * remind table config.
+   * target table config.
    */
   static readonly TARGET_TABLE: DatabaseTable = {
     tableName: 'target_table',
@@ -41,5 +42,15 @@ export class CommonConstants {
     'targetTitle TEXT, targetContent TEXT, targetStatus INTEGER, targetStartTime INTEGER, targetEndTime INTEGER, ' +
     'targetIsRemind INTEGER)',
     columns: ['id', 'targetImg', 'targetTitle', 'targetContent','targetStatus', 'targetStartTime', 'targetEndTime', 'targetIsRemind']
+  };
+
+  /**
+   * memorandum table config.
+   */
+  static readonly MEMORANDUM_TABLE: DatabaseTable = {
+    tableName: 'memorandum_table',
+    sqlCreate: 'CREATE TABLE IF NOT EXISTS memorandum_table(id INTEGER PRIMARY KEY AUTOINCREMENT, memorandumIcon TEXT, ' +
+    'memorandumTitle TEXT, memorandumContent TEXT, memorandumCreateTime INTEGER, memorandumUpdateTime INTEGER)',
+    columns: ['id', 'memorandumIcon', 'memorandumTitle', 'memorandumContent','memorandumCreateTime', 'memorandumUpdateTime']
   };
 }
