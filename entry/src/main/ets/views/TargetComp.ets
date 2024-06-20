@@ -1,6 +1,7 @@
 import router from '@ohos.router'
 import TargetData from '../common/database/data/TargetData'
 import TargetTable from '../common/database/tables/TargetTable'
+import { PageEventBus } from '../common/utils/PageEventBus'
 
 @Component
 @Preview
@@ -12,6 +13,14 @@ export struct TargetComp{
   private TargetTable = new TargetTable(() => {});
 
   aboutToAppear(){//TODO:从目标新建页面返回时，这个回调不会被调用
+    PageEventBus.getInstance().subscribe('refreshTargetComp', this.refreshPage.bind(this));
+  }
+
+  aboutToDisappear(){
+    PageEventBus.getInstance().unsubscribe('refreshTargetComp', this.refreshPage.bind(this));
+  }
+
+  refreshPage(){
     this.TargetTable.getRdbStore(() => {
       this.TargetTable.query(0, (result: TargetData[]) => {
         this.mList = result;

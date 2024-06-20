@@ -3,6 +3,7 @@ import promptAction from '@ohos.promptAction'
 import TargetData from '../../common/database/data/TargetData'
 import TargetTable from '../../common/database/tables/TargetTable'
 import { logger } from '../../common/utils/logger'
+import { PageEventBus } from '../../common/utils/PageEventBus'
 
 @Entry
 @Component
@@ -220,6 +221,7 @@ struct TargetCreate {
             this.mTargetData.targetContent = this.targetContentValue
             this.mTargetData.targetImg = this.getImgString()
             this.TargetTable.insertData(this.mTargetData, (id: number) => {
+              PageEventBus.getInstance().publish('refreshTargetComp');
               router.back()
             });
           }catch (e){
