@@ -1,17 +1,24 @@
 import router from '@ohos.router';
+import RemindData from '../../common/database/data/RemindData';
+import RemindTable from '../../common/database/tables/RemindTable';
 
 @Entry
 @Component
 @Preview
 struct RemindCompleted {
-  @State message: string = 'Hello World'
-  @State isShowDefaultText:boolean = true
-  @State arr: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  @State mList:Array<RemindData> = []
+  @State mRemindData:RemindData = {id:0,remindImg:'',remindTitle:'',remindContent:'',remindTime:0,remindStartTime:0,remindEndTime:0,remindCompleteStatus:false}
+  private RemindTable = new RemindTable(() => {});
 
   onPageShow(){
-    if (this.arr.length > 0) {
-      this.isShowDefaultText = false
-    }
+  }
+
+  aboutToAppear(){
+    this.RemindTable.getRdbStore(() => {
+      this.RemindTable.queryAllCompletedRemind(0, (result: RemindData[]) => {
+        this.mList = result;
+      }, true);
+    });
   }
 
   build() {
@@ -41,7 +48,7 @@ struct RemindCompleted {
         /*这部分是展示的列表内容*/
         List({space:20, initialIndex:0}) {//item的间隔，起始索引值
           //数据源，item和下标
-          ForEach(this.arr, (item, index) => {
+          ForEach(this.mList, (item:RemindData, index) => {
             ListItem() {
               //布局方向，item对齐方式
               Flex({direction: FlexDirection.Row, alignItems: ItemAlign.Center}) {
@@ -50,7 +57,7 @@ struct RemindCompleted {
                   .height(50)
                   .padding(8)
                   .margin({left:10})
-                Text('' + item)
+                Text(item.remindTitle)
                   .fontSize(20)
                   .textAlign(TextAlign.Center)
                   .flexShrink(1)
@@ -71,7 +78,7 @@ struct RemindCompleted {
         Text($r('app.string.remind_completed_default_desc'))
           .fontColor($r('app.color.colorGreen'))
           .textAlign(TextAlign.Center)
-          .visibility(this.isShowDefaultText ? Visibility.Visible : Visibility.None)
+          .visibility(this.mList.length == 0 ? Visibility.Visible : Visibility.None)
       }
       .width('100%')//宽度占满屏幕
       .height('100%')

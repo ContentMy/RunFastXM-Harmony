@@ -25,7 +25,7 @@ export struct RemindComp{
 
   aboutToAppear(){
     this.RemindTable.getRdbStore(() => {
-      this.RemindTable.query(0, (result: RemindData[]) => {
+      this.RemindTable.queryAllInProgressRemind(0, (result: RemindData[]) => {
         this.mList = result;
       }, true);
     });
@@ -45,6 +45,7 @@ export struct RemindComp{
     this.RemindTable.insertData(remindData, (id: number) => {
       remindData.id = id;// 将数据库生成的自增 ID 赋值给 remindData 对象的 id 属性
       this.mList.push(remindData)//数据加入当前页面的缓存
+      //TODO：这里后续在入库时，开启通知
     });
   }
 

@@ -35,11 +35,8 @@ export default class RemindTable{
     this.accountTable.updateData(predicates, valueBucket, callback);
   }
 
-  query(amount: number, callback: Function, isAll: boolean = true) {
-    let predicates = new relationalStore.RdbPredicates(CommonConstants.REMIND_TABLE.tableName);
-    if (!isAll) {
-      predicates.equalTo('amount', amount);
-    }
+  private query(predicates:relationalStore.RdbPredicates, callback: Function) {
+
     this.accountTable.query(predicates, (resultSet: relationalStore.ResultSet) => {
       let count: number = resultSet.rowCount;
       if (count === 0 || typeof count === 'string') {
@@ -67,6 +64,31 @@ export default class RemindTable{
         callback(result);
       }
     });
+  }
+
+
+  queryAllInProgressRemind(amount: number, callback: Function, isAll: boolean = true) {
+    // 创建查询条件对象
+    let predicates = new relationalStore.RdbPredicates(CommonConstants.REMIND_TABLE.tableName);
+    // 添加条件：查询 remindCompleteStatus == 0 的数据
+    predicates.equalTo('remindCompleteStatus', 0);
+    // 根据是否查询所有数据设置查询条件
+    if (!isAll) {
+      predicates.equalTo('amount', amount);
+    }
+    this.query(predicates,callback)
+  }
+
+  queryAllCompletedRemind(amount: number, callback: Function, isAll: boolean = true) {
+    // 创建查询条件对象
+    let predicates = new relationalStore.RdbPredicates(CommonConstants.REMIND_TABLE.tableName);
+    // 添加条件：查询 remindCompleteStatus == 0 的数据
+    predicates.equalTo('remindCompleteStatus', 1);
+    // 根据是否查询所有数据设置查询条件
+    if (!isAll) {
+      predicates.equalTo('amount', amount);
+    }
+    this.query(predicates,callback)
   }
 }
 
