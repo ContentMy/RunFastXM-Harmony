@@ -1,20 +1,30 @@
-
 import router from '@ohos.router'
+import TargetData from '../common/database/data/TargetData'
+import TargetTable from '../common/database/tables/TargetTable'
+
 @Component
 @Preview
 export struct TargetComp{
-  @State title: string = '目标列表'
   @State isCheckIn:boolean = false
   @State checkInString:string = '打卡'
-  @State isShowDefaultText:boolean = false
-  @State arr: string[] = ['测试标题和内容', '测试标题和内容', '测试标题和内容', '测试标题和内容',
-    '测试标题和内容', '测试标题和内容', '测试标题和内容', '测试标题和内容', '测试标题和内容', '测试标题和内容']
+  @State mList:Array<TargetData> = []
+  @State mTargetData:TargetData = {id:0,targetImg:'',targetTitle:'',targetContent:'',targetStatus:0,targetStartTime:0,targetEndTime:0,targetIsRemind:false}
+  private TargetTable = new TargetTable(() => {});
+
+  aboutToAppear(){//TODO:从目标新建页面返回时，这个回调不会被调用
+    this.TargetTable.getRdbStore(() => {
+      this.TargetTable.query(0, (result: TargetData[]) => {
+        this.mList = result;
+      }, true);
+    });
+  }
+
   build(){
     Stack({alignContent:Alignment.BottomEnd}){
       Column() {
         /*这部分是顶部标题和menu的布局*/
         Row(){
-          Text(this.title)
+          Text($r('app.string.main_page_title_target_desc'))
             .fontColor($r('app.color.colorBlack'))
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
@@ -37,23 +47,23 @@ export struct TargetComp{
           /*这部分是展示的列表内容*/
           List({space:20, initialIndex:0}) {//item的间隔，起始索引值
             //数据源，item和下标
-            ForEach(this.arr, (item, index) => {
+            ForEach(this.mList, (item:TargetData, index) => {
               ListItem() {
                 //布局方向，item对齐方式
                 Flex({direction: FlexDirection.Row, alignItems: ItemAlign.Center}) {
-                  Image($r('app.media.ui_icon_sleep'))
+                  Image(this.getImgResourceFromString(item.targetImg))
                     .width(50)
                     .height(50)
                     .padding(8)
                     .margin({left:10})
                   Column(){
-                    Text('' + item)
+                    Text(item.targetTitle)
                       .fontSize(16)
                       .alignSelf(ItemAlign.Start)
                       .flexShrink(1)
                       .fontColor($r('app.color.colorBlack'))
                       .margin({left:10})
-                    Text('' + item)
+                    Text(item.targetContent)
                       .fontSize(10)
                       .alignSelf(ItemAlign.Start)
                       .flexShrink(1)
@@ -82,12 +92,12 @@ export struct TargetComp{
               .margin({left:20,right:20})
 
             }, item => item)
-          }.width('100%')
+          }.width('100%').height('100%')
           /*这部分是没有列表数据时的默认占位内容*/
-          Text($r('app.string.remind_default_desc'))
+          Text($r('app.string.target_default_desc'))
             .fontColor($r('app.color.colorGreen'))
             .textAlign(TextAlign.Center)
-            .visibility(this.isShowDefaultText ? Visibility.Visible : Visibility.None)
+            .visibility(this.mList.length == 0 ? Visibility.Visible : Visibility.None)
         }
         .width('100%')//宽度占满屏幕
         .height('100%')
@@ -114,5 +124,50 @@ export struct TargetComp{
       Divider().strokeWidth(0.5).color($r('app.color.colorGray'))
     }.width('100%')//宽度占满屏幕
     .height('100%')
+  }
+  private getImgResourceFromString(imgString:string):Resource{
+    let resource:Resource
+    switch (imgString) {
+      case 'ui_icon_sleep':
+        resource = $r('app.media.ui_icon_sleep')
+        break;
+      case 'ui_icon_sun':
+        resource = $r('app.media.ui_icon_sun')
+        break;
+      case 'ui_icon_breakfast':
+        resource = $r('app.media.ui_icon_breakfast')
+        break;
+      case 'ui_icon_lunch':
+        resource = $r('app.media.ui_icon_lunch')
+        break;
+      case 'ui_icon_dinner':
+        resource = $r('app.media.ui_icon_dinner')
+        break;
+      case 'ui_icon_study':
+        resource = $r('app.media.ui_icon_study')
+        break;
+      case 'ui_icon_write':
+        resource = $r('app.media.ui_icon_write')
+        break;
+      case 'ui_icon_work':
+        resource = $r('app.media.ui_icon_work')
+        break;
+      case 'ui_icon_running':
+        resource = $r('app.media.ui_icon_running')
+        break;
+      case 'ui_icon_ride':
+        resource = $r('app.media.ui_icon_ride')
+        break;
+      case 'ui_icon_swimming':
+        resource = $r('app.media.ui_icon_swimming')
+        break;
+      case 'ui_icon_soccer':
+        resource = $r('app.media.ui_icon_soccer')
+        break;
+      default:
+        resource = $r('app.media.ui_icon_sleep')
+        break;
+    }
+    return resource
   }
 }

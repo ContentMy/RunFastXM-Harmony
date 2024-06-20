@@ -4,40 +4,40 @@ import { CommonConstants } from '../../contants/CommonConstants';
 import AppDatabase from '../AppDatabase';
 import RemindData from '../data/RemindData';
 export default class RemindTable{
-  private accountTable = new AppDatabase(CommonConstants.REMIND_TABLE.tableName, CommonConstants.REMIND_TABLE.sqlCreate,
+  private remindTable = new AppDatabase(CommonConstants.REMIND_TABLE.tableName, CommonConstants.REMIND_TABLE.sqlCreate,
     CommonConstants.REMIND_TABLE.columns);
 
   constructor(callback: Function = () => {
   }) {
-    this.accountTable.getRdbStore(callback);
+    this.remindTable.getRdbStore(callback);
   }
 
 
   getRdbStore(callback: Function = () => {
   }) {
-    this.accountTable.getRdbStore(callback);
+    this.remindTable.getRdbStore(callback);
   }
   insertData(remind: RemindData, callback: Function) {
     const valueBucket: relationalStore.ValuesBucket = generateBucket(remind);
-    this.accountTable.insertData(valueBucket, callback);
+    this.remindTable.insertData(valueBucket, callback);
   }
 
   deleteData(remind: RemindData, callback: Function) {
     let predicates = new relationalStore.RdbPredicates(CommonConstants.REMIND_TABLE.tableName);
     predicates.equalTo('id', remind.id);
-    this.accountTable.deleteData(predicates, callback);
+    this.remindTable.deleteData(predicates, callback);
   }
 
   updateData(remind: RemindData, callback: Function) {
     const valueBucket: relationalStore.ValuesBucket = generateBucket(remind);
     let predicates = new relationalStore.RdbPredicates(CommonConstants.REMIND_TABLE.tableName);
     predicates.equalTo('id', remind.id);
-    this.accountTable.updateData(predicates, valueBucket, callback);
+    this.remindTable.updateData(predicates, valueBucket, callback);
   }
 
   private query(predicates:relationalStore.RdbPredicates, callback: Function) {
 
-    this.accountTable.query(predicates, (resultSet: relationalStore.ResultSet) => {
+    this.remindTable.query(predicates, (resultSet: relationalStore.ResultSet) => {
       let count: number = resultSet.rowCount;
       if (count === 0 || typeof count === 'string') {
         console.log(`${CommonConstants.REMIND_TABLE_TAG}` + 'Query no results!');

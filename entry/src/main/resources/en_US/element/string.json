@@ -179,6 +179,10 @@
     {
       "name": "remind_create_time_prompt_desc",
       "value": "Please select a reminder time:"
+    },
+    {
+      "name": "target_create_title_null_desc",
+      "value": "The goal name cannot be empty"
     }
   ]
 }
