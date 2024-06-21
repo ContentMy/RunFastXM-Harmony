@@ -13,10 +13,8 @@
 Kotlin版本：https://github.com/ContentMy/RunFastXM
 
 
-
 #### 分支
 开发中：https://github.com/ContentMy/RunFastXM-Harmony/tree/dev
-
 
 
 #### 应用快照
