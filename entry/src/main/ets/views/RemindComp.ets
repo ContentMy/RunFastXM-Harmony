@@ -65,7 +65,7 @@ export struct RemindComp{
       Column() {
         /*这部分是顶部标题和menu的布局*/
         Row(){
-          Text($r('app.string.remind_completed_title_desc'))
+          Text($r('app.string.main_page_title_remind_desc'))
             .fontColor($r('app.color.colorBlack'))
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
