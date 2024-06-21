@@ -11,6 +11,182 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "user_about_desc",
+      "value": "关于小马快跑"
+    },
+    {
+      "name": "user_privacy_desc",
+      "value": "隐私政策与用户协议"
+    },
+    {
+      "name": "user_information_desc",
+      "value": "使用说明"
+    },
+    {
+      "name": "user_information_remind_desc",
+      "value": "提醒功能使用说明"
+    },
+    {
+      "name": "user_information_target_desc",
+      "value": "目标功能使用说明"
+    },
+    {
+      "name": "user_information_memorandum_desc",
+      "value": "记录生活功能使用说明"
+    },
+    {
+      "name": "user_remind_setting_desc",
+      "value": "提醒设置"
+    },
+    {
+      "name": "remind_default_desc",
+      "value": "再也不怕忘掉啦~\n点击\"+\"添加提醒吧！"
+    },
+    {
+      "name": "remind_completed_default_desc",
+      "value": "还没有已完成的提醒哦，快去添加提醒吧！"
+    },
+    {
+      "name": "remind_completed_title_desc",
+      "value": "已完成提醒"
+    },
+    {
+      "name": "target_default_desc",
+      "value": "种下一棵树最好的时间是十年前，其次是现在~\n所以赶快点击\"+\"添加你的目标吧！"
+    },
+    {
+      "name": "target_create_title_new_desc",
+      "value": "新建目标"
+    },
+    {
+      "name": "target_create_title_edit_desc",
+      "value": "编辑目标"
+    },
+    {
+      "name": "target_create_title_default_desc",
+      "value": "请输入目标的名称"
+    },
+    {
+      "name": "target_create_icon_desc",
+      "value": "请挑选目标的图标："
+    },
+    {
+      "name": "target_create_start_time_desc",
+      "value": "目标开始时间："
+    },
+    {
+      "name": "target_create_end_time_desc",
+      "value": "目标结束时间："
+    },
+    {
+      "name": "target_create_state_desc",
+      "value": "目标状态："
+    },
+    {
+      "name": "target_create_content_desc",
+      "value": "对自己说一些什么吧："
+    },
+    {
+      "name": "target_create_content_default_desc",
+      "value": "小马快跑"
+    },
+    {
+      "name": "save_desc",
+      "value": "保存"
+    },
+    {
+      "name": "memorandum_default_desc",
+      "value": "这里还没有生活记录哦~\n点击上面的输入框写下你的生活记录吧！"
+    },
+    {
+      "name": "memorandum_input_default_desc",
+      "value": "记录一下今天的心情吧"
+    },
+    {
+      "name": "memorandum_content_desc",
+      "value": "记录一下详细内容吧："
+    },
+    {
+      "name": "memorandum_content_default_desc",
+      "value": "我还想说..."
+    },
+    {
+      "name": "memorandum_resource_img_desc",
+      "value": "选择想要添加的图片吧："
+    },
+    {
+      "name": "memorandum_create_desc",
+      "value": "新建记录"
+    },
+    {
+      "name": "memorandum_detail_desc",
+      "value": "记录详情"
+    },
+    {
+      "name": "guide_remind_desc",
+      "value": "即时提醒"
+    },
+    {
+      "name": "guide_remind_content_desc",
+      "value": "不再担心忙于其他事错过时间\n也不用烦恼扭头忘记了想要做的事情\n想做什么先把它记录下来，我来为您提醒"
+    },
+    {
+      "name": "guide_target_desc",
+      "value": "制定目标"
+    },
+    {
+      "name": "guide_target_content_desc",
+      "value": "突然没有什么目标和计划心里很慌\n又或者有想做的目标和计划总是偷懒\n让小马为你记录你的目标，每天打卡坚持吧"
+    },
+    {
+      "name": "guide_memorandum_desc",
+      "value": "记录生活"
+    },
+    {
+      "name": "guide_memorandum_content_desc",
+      "value": "生活总有美好的瞬间值得我们记录下来\n文字、心情、图片，记录生活的形式多种多样\n偶尔回过头看看，也是蛮不错的喔"
+    },
+    {
+      "name": "guide_start_desc",
+      "value": "开始"
+    },
+    {
+      "name": "main_page_title_remind_desc",
+      "value": "提醒列表"
+    },
+    {
+      "name": "main_page_title_target_desc",
+      "value": "目标列表"
+    },
+    {
+      "name": "main_page_title_memorandum_desc",
+      "value": "记录生活"
+    },
+    {
+      "name": "main_page_title_user_desc",
+      "value": "个人设置"
+    },
+    {
+      "name": "remind_create_title_default_desc",
+      "value": "请输入想要提醒的事项"
+    },
+    {
+      "name": "remind_create_title_null_desc",
+      "value": "输入想要提醒的事项后再确认哦"
+    },
+    {
+      "name": "remind_create_time_prompt_desc",
+      "value": "请选择提醒时间:"
+    },
+    {
+      "name": "target_create_title_null_desc",
+      "value": "目标名称不能为空"
+    },
+    {
+      "name": "memorandum_create_title_null_desc",
+      "value": "记录下心情才能保存哦"
     }
   ]
 }

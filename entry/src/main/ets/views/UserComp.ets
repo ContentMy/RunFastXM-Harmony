@@ -1,4 +1,4 @@
-
+import router from '@ohos.router';
 @Component
 @Preview
 export struct UserComp{
@@ -35,6 +35,84 @@ export struct UserComp{
         }
 
         /*这部分是设置功能项的ui组件展示*/
+        Row(){
+          Image($r('app.media.ui_small_icon_remind'))
+            .width(25)
+            .height(25)
+            .margin({right:10})
+          Text($r('app.string.user_about_desc'))
+            .fontSize(16)
+            .fontColor($r('app.color.colorBlack'))
+        }
+        .width('100%')
+        .height(50)
+        .margin({top:50})
+        .onClick((event: ClickEvent) => {
+          // this.title = 'Click Point:' + '\n  screenX:' + event.screenX + '\n  screenY:' + event.screenY
+          // + '\n  x:' + event.x + '\n  y:' + event.y + '\ntarget:' + '\n  component globalPos:('
+          // + event.target.area.globalPosition.x + ',' + event.target.area.globalPosition.y + ')\n  width:'
+          // + event.target.area.width + '\n  height:' + event.target.area.height + '\ntimestamp' + event.timestamp;
+          router.pushUrl({
+            url: 'pages/user/UserAbout' // 目标url
+          }, router.RouterMode.Standard, (err) => {
+            if (err) {
+              console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+              return;
+            }
+            console.info('Invoke pushUrl succeeded.')
+          })
+        })
+
+        Row(){
+          Image($r('app.media.ui_small_icon_remind'))
+            .width(25)
+            .height(25)
+            .margin({right:10})
+          Text($r('app.string.user_privacy_desc'))
+            .fontSize(16)
+            .fontColor($r('app.color.colorBlack'))
+        }
+        .width('100%')
+        .height(50)
+        .margin({top:10})
+        .onClick((event:ClickEvent)=>{
+          router.pushUrl({
+            url: 'pages/user/UserPrivacy' // 目标url
+          }, router.RouterMode.Standard, (err) => {
+            if (err) {
+              console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+              return;
+            }
+            console.info('Invoke pushUrl succeeded.')
+          })
+        })
+
+        Row(){
+          Image($r('app.media.ui_small_icon_remind'))
+            .width(25)
+            .height(25)
+            .margin({right:10})
+          Text($r('app.string.user_information_desc'))
+            .fontSize(16)
+            .fontColor($r('app.color.colorBlack'))
+        }
+        .width('100%')
+        .height(50)
+        .margin({top:10})
+
+        Row(){
+          Image($r('app.media.ui_small_icon_remind'))
+            .width(25)
+            .height(25)
+            .margin({right:10})
+          Text($r('app.string.user_remind_setting_desc'))
+            .fontSize(16)
+            .fontColor($r('app.color.colorBlack'))
+        }
+        .width('100%')
+        .height(50)
+        .margin({top:10})
+        .visibility(Visibility.None)
 
 
       }

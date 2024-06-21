@@ -11,6 +11,182 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "user_about_desc",
+      "value": "aboutApplication"
+    },
+    {
+      "name": "user_privacy_desc",
+      "value": "privacy"
+    },
+    {
+      "name": "user_information_desc",
+      "value": "information"
+    },
+    {
+      "name": "user_remind_setting_desc",
+      "value": "remindSetting"
+    },
+    {
+      "name": "user_information_remind_desc",
+      "value": "remindInformation"
+    },
+    {
+      "name": "user_information_target_desc",
+      "value": "targetInformation"
+    },
+    {
+      "name": "user_information_memorandum_desc",
+      "value": "memorandumInformation"
+    },
+    {
+      "name": "remind_default_desc",
+      "value": "Don‘t worry forget~\nClick\"+\" add Reminder！"
+    },
+    {
+      "name": "remind_completed_default_desc",
+      "value": "There are no completed reminders here，Please add reminder"
+    },
+    {
+      "name": "remind_completed_title_desc",
+      "value": "Completed Reminders"
+    },
+    {
+      "name": "target_default_desc",
+      "value": "go ahead and get started~\nClick\"+\"add your target！"
+    },
+    {
+      "name": "target_create_title_new_desc",
+      "value": "Create New Target"
+    },
+    {
+      "name": "target_create_title_edit_desc",
+      "value": "Edit Target"
+    },
+    {
+      "name": "target_create_title_default_desc",
+      "value": "Please Enter the Name of the Target"
+    },
+    {
+      "name": "target_create_icon_desc",
+      "value": "Please Choose the Icon for the Target："
+    },
+    {
+      "name": "target_create_start_time_desc",
+      "value": "Target Start Time："
+    },
+    {
+      "name": "target_create_end_time_desc",
+      "value": " Target End Time："
+    },
+    {
+      "name": "target_create_state_desc",
+      "value": "Target Status："
+    },
+    {
+      "name": "target_create_content_desc",
+      "value": "Say Something to Yourself："
+    },
+    {
+      "name": "target_create_content_default_desc",
+      "value": "Let's start taking action now！"
+    },
+    {
+      "name": "save_desc",
+      "value": "Save"
+    },
+    {
+      "name": "memorandum_default_desc",
+      "value": "There are no life records here yet~\nClick on the input box above to write down your life records!"
+    },
+    {
+      "name": "memorandum_input_default_desc",
+      "value": "Record your feelings today"
+    },
+    {
+      "name": "memorandum_content_desc",
+      "value": "Record the details："
+    },
+    {
+      "name": "memorandum_content_default_desc",
+      "value": "I want to say..."
+    },
+    {
+      "name": "memorandum_resource_img_desc",
+      "value": "Choose the picture you want to add："
+    },
+    {
+      "name": "memorandum_create_desc",
+      "value": "New record"
+    },
+    {
+      "name": "memorandum_detail_desc",
+      "value": "Record details"
+    },
+    {
+      "name": "guide_remind_desc",
+      "value": "Real-time notifications"
+    },
+    {
+      "name": "guide_remind_content_desc",
+      "value": "No more worries about missing the time because you're busy with other things.\nNo more troubles with forgetting what you wanted to do when you turn around.\nWhatever you want to do, just note it down, and I'll remind you."
+    },
+    {
+      "name": "guide_start_desc",
+      "value": "Start"
+    },
+    {
+      "name": "guide_target_desc",
+      "value": "Set goals"
+    },
+    {
+      "name": "guide_memorandum_desc",
+      "value": "Document life"
+    },
+    {
+      "name": "guide_target_content_desc",
+      "value": "Suddenly feeling anxious with no goals or plans?\nOr perhaps you have goals and plans but always end up procrastinating?\nLet XM record your goals and keep you on track with daily check-ins."
+    },
+    {
+      "name": "guide_memorandum_content_desc",
+      "value": "Life always has beautiful moments worth recording.\nWhether it's words, emotions, or pictures, there are many ways to document life.\nOccasionally looking back at them can be quite nice, too."
+    },
+    {
+      "name": "main_page_title_remind_desc",
+      "value": "Reminder List"
+    },
+    {
+      "name": "main_page_title_target_desc",
+      "value": "Goal List"
+    },
+    {
+      "name": "main_page_title_memorandum_desc",
+      "value": "Life Log"
+    },
+    {
+      "name": "main_page_title_user_desc",
+      "value": "Personal Settings"
+    },
+    {
+      "name": "remind_create_title_null_desc",
+      "value": "Remind title can't be null"
+    },
+    {
+      "name": "remind_create_title_default_desc",
+      "value": "Please enter the items you want to be reminded about"
+    },
+    {
+      "name": "remind_create_time_prompt_desc",
+      "value": "Please select a reminder time:"
+    },
+    {
+      "name": "target_create_title_null_desc",
+      "value": "The goal name cannot be empty"
+    },
+    {
+      "name": "memorandum_create_title_null_desc",
+      "value": "You need to record your feeling to save it"
     }
   ]
 }

@@ -1,5 +1,15 @@
 {
   "src": [
-    "pages/Index"
+    "pages/Index",
+    "pages/user/UserAbout",
+    "pages/user/UserPrivacy",
+    "pages/user/UserInformation",
+    "pages/remind/RemindCompleted",
+    "pages/target/TargetCreate",
+    "pages/memorandum/MemorandumCreate",
+    "pages/memorandum/MemorandumDetail",
+    "pages/remind/RemindDetail",
+    "pages/Splash",
+    "pages/Guide"
   ]
 }

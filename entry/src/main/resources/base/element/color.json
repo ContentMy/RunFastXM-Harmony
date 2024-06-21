@@ -17,8 +17,32 @@
       "value": "#979797"
     },
     {
+      "name": "colorGrayLight",
+      "value": "#EDEDED"
+    },
+    {
       "name": "colorGreen",
       "value": "#029F72"
+    },
+    {
+      "name": "colorGreenDark",
+      "value": "#072A24"
+    },
+    {
+      "name": "colorGreenMid",
+      "value": "#02BC6A"
+    },
+    {
+      "name": "colorGreenMidNext",
+      "value": "#7BC5AE"
+    },
+    {
+      "name": "colorGreenMidNextLight",
+      "value": "#D1EDE1"
+    },
+    {
+      "name": "colorYellow",
+      "value": "#FADB88"
     }
   ]
 }
