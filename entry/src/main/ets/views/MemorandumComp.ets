@@ -68,7 +68,7 @@ export struct MemorandumComp{
 
 
         /*这部分是展示列表的ui布局*/
-        Stack(){
+        Stack({alignContent:Alignment.Start}){
           /*这部分是后续要增加的tips，暂时不处理*/
 
           /*这部分是展示的列表内容*/
@@ -78,22 +78,13 @@ export struct MemorandumComp{
               ListItem() {
                 Row(){
                   /*列表部分*/
-                  /*时间轴实现部分*/
-                  Column(){
-                    Column()
-                      .width(10)
-                      .height(10)
-                      .backgroundColor($r('app.color.colorGreen'))
-                      .borderRadius(5)
-                      .margin({top:5})
-                    Column()
-                      .width(1)
-                      .height('100%')
-                      .border({
-                        width:{left:1},
-                        color:{left:$r('app.color.colorGreen')}
-                      })
-                  }
+                  /*时间点实现部分*/
+                  Column()
+                    .width(10)
+                    .height(10)
+                    .backgroundColor($r('app.color.colorGreen'))
+                    .borderRadius(5)
+                    .margin({top:5})
                   Column(){
                     Text(this.getTimeString(item.memorandumCreateTime,'yyyy-MM-dd')).fontColor($r('app.color.colorGray'))
                     .width('95%')//TODO：宽度和下列组件保持统一，不然会ui显示异常，后续考虑优化
@@ -129,7 +120,7 @@ export struct MemorandumComp{
                       .width('95%')
                       .height('95%')
                       .borderRadius(10)
-                    }.layoutWeight(1).onClick(()=>{
+                    }.margin({top:10}).layoutWeight(1).onClick(()=>{
                       router.pushUrl({
                         url: 'pages/memorandum/MemorandumDetail' // 目标url
                       }, router.RouterMode.Standard, (err) => {
@@ -140,15 +131,27 @@ export struct MemorandumComp{
                         console.info('Invoke pushUrl succeeded.')
                       })
                     })
-                  }
-                }
+                  }.margin({left:10})
+                }.alignItems(VerticalAlign.Top)
               }
               .height(80)//TODO:目前是还原ui，后续进行逻辑和数据关联时，需要动态去设置背景的高度，因为目前把外部的高度定死了，后续展示的ui内容高度肯定是灵活的
-              .margin({top:10})
+              .margin({top:20})
             }, item => item)
           }.width('100%').height('100%')
+          /*时间轴 - 时间线部分*/
+          Line()
+            .width(10)
+            .height('100%')
+            .border({
+              width:{left:1},
+              color:{left:$r('app.color.colorGreen')}
+            })
+            .margin({left:4})
+            .visibility(this.mList.length == 0 ? Visibility.None : Visibility.Visible)
+
           /*这部分是没有列表数据时的默认占位内容*/
           Text($r('app.string.memorandum_default_desc'))
+            .width('100%')
             .fontColor($r('app.color.colorGreen'))
             .textAlign(TextAlign.Center)
             .visibility(this.mList.length == 0 ? Visibility.Visible : Visibility.None)
