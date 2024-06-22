@@ -44,6 +44,13 @@ export class CommonConstants {
     columns: ['id', 'targetImg', 'targetTitle', 'targetContent','targetStatus', 'targetStartTime', 'targetEndTime', 'targetIsRemind']
   };
 
+  static readonly TARGET_CHICK_IN_TABLE: DatabaseTable = {
+    tableName: 'target_check_in_table',
+    sqlCreate: 'CREATE TABLE IF NOT EXISTS target_table(id INTEGER PRIMARY KEY AUTOINCREMENT, targetId INTEGER, ' +
+    'targetCheckIn INTEGER, targetCheckInTime INTEGER)',
+    columns: ['id', 'targetId', 'targetCheckIn', 'targetCheckInTime']
+  };
+
   /**
    * memorandum table config.
    */

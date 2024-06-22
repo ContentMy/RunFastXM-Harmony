@@ -2,10 +2,13 @@
 import relationalStore from '@ohos.data.relationalStore';
 import { CommonConstants } from '../../contants/CommonConstants';
 import AppDatabase from '../AppDatabase';
+import TargetCheckInData from '../data/TargetCheckInData';
 import TargetData from '../data/TargetData';
+import TargetCheckInTable from './TargetCheckInTable';
 export default class TargetTable{
   private targetTable = new AppDatabase(CommonConstants.TARGET_TABLE.tableName, CommonConstants.TARGET_TABLE.sqlCreate,
     CommonConstants.TARGET_TABLE.columns);
+  private targetCheckInTable = new TargetCheckInTable();
 
   constructor(callback: Function = () => {
   }) {
@@ -71,6 +74,53 @@ export default class TargetTable{
     });
   }
 
+  queryWithCheckInStatus(amount: number, callback: Function, isAll: boolean = true) {
+    let predicates = new relationalStore.RdbPredicates(CommonConstants.TARGET_TABLE.tableName);
+    if (!isAll) {
+      predicates.equalTo('amount', amount);
+    }
+    this.targetTable.query(predicates, (resultSet: relationalStore.ResultSet) => {
+      let count: number = resultSet.rowCount;
+      if (count === 0 || typeof count === 'string') {
+        console.log(`${CommonConstants.TARGET_TABLE_TAG}` + 'Query no results!');
+        callback([]);
+      } else {
+        resultSet.goToFirstRow();
+        const result: TargetDataWithCheckIn[] = [];
+        for (let i = 0; i < count; i++) {
+          let tmp: TargetData = {
+            id: 0, targetImg:'', targetTitle:'', targetContent:'', targetStatus:0,
+            targetStartTime:0, targetEndTime:0, targetIsRemind:false
+          };
+          tmp.id = resultSet.getDouble(resultSet.getColumnIndex('id'));
+          tmp.targetImg = resultSet.getString(resultSet.getColumnIndex('targetImg'));
+          tmp.targetTitle = resultSet.getString(resultSet.getColumnIndex('targetTitle'));
+          tmp.targetContent = resultSet.getString(resultSet.getColumnIndex('targetContent'));
+          tmp.targetStatus = resultSet.getLong(resultSet.getColumnIndex('targetStatus'));
+          tmp.targetStartTime = resultSet.getLong(resultSet.getColumnIndex('targetStartTime'));
+          tmp.targetEndTime = resultSet.getLong(resultSet.getColumnIndex('targetEndTime'));
+          tmp.targetIsRemind = resultSet.getDouble(resultSet.getColumnIndex('targetIsRemind')) == 1 ? true : false;
+
+          // 查询当天打卡状态
+          this.targetCheckInTable.queryByTargetId(tmp.id, (checkInResults: TargetCheckInData[]) => {
+            const today = new Date().setHours(0, 0, 0, 0);
+            const todayCheckIn = checkInResults.find(ci => new Date(ci.targetCheckInTime).setHours(0, 0, 0, 0) === today);
+            const targetCheckInStatus = todayCheckIn ? todayCheckIn.targetCheckIn : false;
+
+            result[i] = { ...tmp, targetCheckInStatus };
+            if (i === count - 1) {
+              callback(result);
+            }
+          });
+          resultSet.goToNextRow();
+        }
+      }
+    });
+  }
+}
+
+export interface TargetDataWithCheckIn extends TargetData {
+  targetCheckInStatus: boolean;
 }
 
 function generateBucket(target: TargetData): relationalStore.ValuesBucket {
