@@ -14,7 +14,7 @@ export struct RemindComp{
   dialogController: CustomDialogController = new CustomDialogController({
     builder: RemindDialog({
       mRemindData: $mRemindData,
-      confirm: (remindData: RemindData) => this.onAccept(remindData)
+      confirm: (remindData: RemindData): void => this.onAccept(remindData)
     }),
     cancel: this.outSideClick,
     autoCancel: true,
@@ -32,7 +32,7 @@ export struct RemindComp{
   }
 
   aboutToDisappear(){
-    this.dialogController = null // 将dialogController置空
+    // this.dialogController = null // 将dialogController置空
   }
 
   /**
@@ -121,7 +121,7 @@ export struct RemindComp{
               .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:5,offsetY:5})
               .margin({left:20,right:20})
 
-            }, item => item)
+            }, (item:string) => item)
           }.width('100%').height('100%')
           /*这部分是没有列表数据时的默认占位内容*/
           Text($r('app.string.remind_default_desc'))

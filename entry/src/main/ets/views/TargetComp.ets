@@ -1,16 +1,24 @@
 import router from '@ohos.router'
+import promptAction from '@ohos.promptAction'
+import TargetCheckInData from '../common/database/data/TargetCheckInData'
 import TargetData from '../common/database/data/TargetData'
+import TargetCheckInTable from '../common/database/tables/TargetCheckInTable'
 import TargetTable from '../common/database/tables/TargetTable'
 import { PageEventBus } from '../common/utils/PageEventBus'
+import { logger } from '../common/utils/logger'
+import { CommonConstants } from '../common/contants/CommonConstants'
+import TargetDataWithCheckIn from '../common/database/data/TargetDataWithCheckIn'
 
 @Component
 @Preview
 export struct TargetComp{
-  @State isCheckIn:boolean = false
-  @State checkInString:string = '打卡'
-  @State mList:Array<TargetData> = []
-  @State mTargetData:TargetData = {id:0,targetImg:'',targetTitle:'',targetContent:'',targetStatus:0,targetStartTime:0,targetEndTime:0,targetIsRemind:false}
+  @State checkInString:string = ''
+  @State checkInInterval:number = 0
+  @State mList:Array<TargetDataWithCheckIn> = []
+  @State mTargetData:TargetData = new TargetData()
+  @State mTargetCheckInData:TargetCheckInData = new TargetCheckInData()
   private TargetTable = new TargetTable(() => {});
+  private TargetCheckInTable = new TargetCheckInTable(() => {});
 
   aboutToAppear(){//TODO:从目标新建页面返回时，这个回调不会被调用
     PageEventBus.getInstance().subscribe('refreshTargetComp', this.refreshPage.bind(this));
@@ -22,11 +30,20 @@ export struct TargetComp{
   }
 
   refreshPage(){
-    this.TargetTable.getRdbStore(() => {
-      this.TargetTable.query(0, (result: TargetData[]) => {
+    try{
+      this.TargetTable.queryWithCheckInStatus(0, (result: TargetDataWithCheckIn[]) => {
         this.mList = result;
       }, true);
-    });
+    }catch (e){
+      logger.error(CommonConstants.RUN_FAST_XM_DB_TAG,e)
+    }
+  }
+
+  checkInTarget(isCheckIn:boolean){
+    this.TargetCheckInTable.insertData(this.mTargetCheckInData,() => {
+      this.checkInString = isCheckIn ? '已打卡' : '打卡'
+      console.log('Check-in data inserted successfully');
+    })
   }
 
   build(){
@@ -57,30 +74,30 @@ export struct TargetComp{
           /*这部分是展示的列表内容*/
           List({space:20, initialIndex:0}) {//item的间隔，起始索引值
             //数据源，item和下标
-            ForEach(this.mList, (item:TargetData, index) => {
+            ForEach(this.mList, (item:TargetDataWithCheckIn, index) => {
               ListItem() {
                 //布局方向，item对齐方式
                 Flex({direction: FlexDirection.Row, alignItems: ItemAlign.Center}) {
-                  Image(this.getImgResourceFromString(item.targetImg))
+                  Image(this.getImgResourceFromString(item.targetData.targetImg))
                     .width(50)
                     .height(50)
                     .padding(8)
                     .margin({left:10})
                   Column(){
-                    Text(item.targetTitle)
+                    Text(item.targetData.targetTitle)
                       .fontSize(16)
                       .alignSelf(ItemAlign.Start)
                       .flexShrink(1)
                       .fontColor($r('app.color.colorBlack'))
                       .margin({left:10})
-                    Text(item.targetContent)
+                    Text(item.targetData.targetContent)
                       .fontSize(10)
                       .alignSelf(ItemAlign.Start)
                       .flexShrink(1)
                       .fontColor($r('app.color.colorGray'))
                       .margin({left:10,top:10})
                   }.layoutWeight(1)
-                  Button(this.checkInString,{type: ButtonType.Normal, stateEffect: true })
+                  Button(this.checkInString = item.targetCheckInStatus ? '已打卡' : '打卡',{type: ButtonType.Normal, stateEffect: true })
                     .fontSize(14)
                     .fontColor($r('app.color.colorBlack'))
                     .backgroundColor($r('app.color.colorYellow'))
@@ -89,7 +106,21 @@ export struct TargetComp{
                     .borderRadius(10)
                     .margin({right:20})
                     .onClick(()=>{
-                      this.checkInString = this.isCheckIn ? '已打卡' : '打卡'
+                      let time = new Date().getTime()
+                      if(this.checkInInterval > 0 && time - this.checkInInterval > 1000){//限制打卡与取消打卡的间隔时间为1s
+                        promptAction.showToast({message: '打卡要认真，一步一脚印', duration: 2000})
+                        return;
+                      }
+                      item.targetCheckInStatus = this.checkInString == '打卡'? true : false
+                      this.mTargetCheckInData.targetId = item.targetData.id
+                      this.mTargetCheckInData.targetCheckIn = item.targetCheckInStatus
+                      if (item.targetCheckInStatus) {
+                        this.mTargetCheckInData.targetCheckInTime = time
+                      }else{
+                        this.mTargetCheckInData.targetCancelCheckInTime = time
+                      }
+                      logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,`打卡数据包：${JSON.stringify(this.mTargetCheckInData)}`)
+                      this.checkInTarget(item.targetCheckInStatus)
                     })
                 }
               }
@@ -101,7 +132,7 @@ export struct TargetComp{
               .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:5,offsetY:5})
               .margin({left:20,right:20})
 
-            }, item => item)
+            }, (item:string) => item)
           }.width('100%').height('100%')
           /*这部分是没有列表数据时的默认占位内容*/
           Text($r('app.string.target_default_desc'))

@@ -136,7 +136,7 @@ export struct MemorandumComp{
               }
               .height(80)//TODO:目前是还原ui，后续进行逻辑和数据关联时，需要动态去设置背景的高度，因为目前把外部的高度定死了，后续展示的ui内容高度肯定是灵活的
               .margin({top:20})
-            }, item => item)
+            }, (item:string) => item)
           }.width('100%').height('100%')
           /*时间轴 - 时间线部分*/
           Line()

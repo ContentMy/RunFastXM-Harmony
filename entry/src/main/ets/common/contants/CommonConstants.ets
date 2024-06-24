@@ -6,6 +6,11 @@ export class CommonConstants {
   static readonly SPACE_LG = 16
 
   /**
+   * String that empty.
+   */
+  static readonly EMPTY_STRING: string = '';
+
+  /**
    * Log tag.
    */
   static readonly RUN_FAST_XM_DB_TAG = '[Debug.run.fast.xm]';
@@ -46,9 +51,9 @@ export class CommonConstants {
 
   static readonly TARGET_CHICK_IN_TABLE: DatabaseTable = {
     tableName: 'target_check_in_table',
-    sqlCreate: 'CREATE TABLE IF NOT EXISTS target_table(id INTEGER PRIMARY KEY AUTOINCREMENT, targetId INTEGER, ' +
-    'targetCheckIn INTEGER, targetCheckInTime INTEGER)',
-    columns: ['id', 'targetId', 'targetCheckIn', 'targetCheckInTime']
+    sqlCreate: 'CREATE TABLE IF NOT EXISTS target_check_in_table(id INTEGER PRIMARY KEY AUTOINCREMENT, targetId INTEGER, ' +
+    'targetCheckIn INTEGER, targetCheckInTime INTEGER, targetCancelCheckInTime INTEGER)',
+    columns: ['id', 'targetId', 'targetCheckIn', 'targetCheckInTime','targetCancelCheckInTime']
   };
 
   /**

@@ -102,7 +102,7 @@ struct TargetCreate {
           .onClick(()=>{
             this.getImgResourceFromIndex(index)
           })
-        }, item => item)
+        }, (item:string) => item)
       }
       .width('100%')
       .height(50)
@@ -178,7 +178,7 @@ struct TargetCreate {
           .borderWidth(0.5)
           .borderColor($r('app.color.colorBlack'))
           .padding({top:4,bottom:4,left:8,right:8})
-        }, item => item)
+        }, (item:string) => item)
       }
       .width('100%')
       .height(20)

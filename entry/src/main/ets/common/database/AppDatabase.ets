@@ -1,7 +1,7 @@
 import relationalStore from '@ohos.data.relationalStore';
 import { CommonConstants } from '../contants/CommonConstants';
 import { logger } from '../utils/logger';
-
+import {} from '@ohos.base'
 export default class AppDatabase{
 
   private rdbStore: relationalStore.RdbStore | null = null;
@@ -49,6 +49,28 @@ export default class AppDatabase{
     const valueBucket: relationalStore.ValuesBucket = data;
     if (this.rdbStore) {
       this.rdbStore.insert(this.tableName, valueBucket, (err, ret) => {
+        if (err) {
+          logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `insertData() failed, err: ${err}`);
+          callback(resFlag);
+          return;
+        }
+        logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, `insertData() finished: ${ret}`);
+        callback(ret);
+      });
+    }
+  }
+
+  insertDataWithResolution(data: relationalStore.ValuesBucket, resolutionMode:relationalStore.ConflictResolution, callback: Function = () => {
+  }) {
+    if (!callback || typeof callback === 'undefined' || callback === undefined) {
+      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'insertData() has no callback!');
+      return;
+    }
+    let resFlag: boolean = false;
+    const valueBucket: relationalStore.ValuesBucket = data;
+    if (this.rdbStore) {
+      //数据插入执行ON_CONFLICT_REPLACE模式，如果插入有数据的话进行替换
+      this.rdbStore.insert(this.tableName, valueBucket, resolutionMode, (err, ret) => {
         if (err) {
           logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `insertData() failed, err: ${err}`);
           callback(resFlag);

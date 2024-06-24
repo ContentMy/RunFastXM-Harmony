@@ -40,9 +40,9 @@ class ThemeManager {
       }
     })
     // 默认浅色模式
-    const initColorMode = AppStorage.Get('initColorMode')
-    PersistentStorage.PersistProp('colorMode', initColorMode)
-    const currentColorMode = AppStorage.Get('colorMode')
+    // const initColorMode = AppStorage.Get('initColorMode')
+    // PersistentStorage.PersistProp('colorMode', initColorMode)
+    // const currentColorMode = AppStorage.Get('colorMode')
     // app.setColorMode(currentColorMode)
 
   }

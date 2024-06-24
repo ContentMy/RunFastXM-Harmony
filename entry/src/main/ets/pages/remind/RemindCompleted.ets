@@ -7,7 +7,7 @@ import RemindTable from '../../common/database/tables/RemindTable';
 @Preview
 struct RemindCompleted {
   @State mList:Array<RemindData> = []
-  @State mRemindData:RemindData = {id:0,remindImg:'',remindTitle:'',remindContent:'',remindTime:0,remindStartTime:0,remindEndTime:0,remindCompleteStatus:false}
+  @State mRemindData:RemindData = new RemindData()
   private RemindTable = new RemindTable(() => {});
 
   onPageShow(){
@@ -72,7 +72,7 @@ struct RemindCompleted {
             .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:5,offsetY:5})
             .margin({left:20,right:20})
 
-          }, item => item)
+          }, (item:string) => item)//TODO：这个第三个参数的具体作用以及含义需要研究一下
         }.width('100%')
         /*这部分是没有列表数据时的默认占位内容*/
         Text($r('app.string.remind_completed_default_desc'))

@@ -11,10 +11,9 @@ export struct RemindDialog{
   @State enterString:string = ''
   @State sendImgResource:Resource = $r('app.media.ui_send_gray')
   @State selectIndex:number = 0// -1表示未选中任何项，0是第一项，目前逻辑下默认为第一项
-  controller?: CustomDialogController
   // 若尝试在CustomDialog中传入多个其他的Controller，以实现在CustomDialog中打开另一个或另一些CustomDialog，那么此处需要将指向自己的controller放在所有controller的后面
   confirm?: (remindData: RemindData) => void
-
+  controller: CustomDialogController
   aboutToAppear(){
     //TODO:增加自动弹出软键盘
   }
@@ -76,7 +75,7 @@ export struct RemindDialog{
             .backgroundColor(this.isSelectedItem(index)?$r('app.color.colorBlack'):$r('app.color.colorGreen'))
             .borderRadius(5)
             .padding({top:4,bottom:4,left:8,right:8})
-          }, item => item)
+          }, (item:string) => item)
         }
         .width('100%')
         .margin({ left: 30,top:10 })
@@ -107,7 +106,9 @@ export struct RemindDialog{
               this.mRemindData.remindEndTime = remindStartTime + remindTime
               this.mRemindData.remindCompleteStatus = false
               this.controller.close()
-              this.confirm(this.mRemindData)
+              if (this.confirm) {
+                this.confirm(this.mRemindData)
+              }
             }catch (e){
               logger.error(e)
             }

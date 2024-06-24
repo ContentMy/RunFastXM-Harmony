@@ -3,6 +3,7 @@ import relationalStore from '@ohos.data.relationalStore';
 import { CommonConstants } from '../../contants/CommonConstants';
 import AppDatabase from '../AppDatabase';
 import TargetCheckInData from '../data/TargetCheckInData';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 export default class TargetCheckInTable {
   private targetCheckInTable = new AppDatabase(CommonConstants.TARGET_CHICK_IN_TABLE.tableName, CommonConstants.TARGET_CHICK_IN_TABLE.sqlCreate, CommonConstants.TARGET_CHICK_IN_TABLE.columns);
@@ -10,10 +11,13 @@ export default class TargetCheckInTable {
   constructor(callback: Function = () => {}) {
     this.targetCheckInTable.getRdbStore(callback);
   }
-
+  getRdbStore(callback: Function = () => {
+  }) {
+    this.targetCheckInTable.getRdbStore(callback);
+  }
   insertData(targetCheckInData: TargetCheckInData, callback: Function) {
     const valueBucket: relationalStore.ValuesBucket = generateCheckInBucket(targetCheckInData);
-    this.targetCheckInTable.insertData(valueBucket, callback);
+    this.targetCheckInTable.insertDataWithResolution(valueBucket, relationalStore.ConflictResolution.ON_CONFLICT_REPLACE ,callback);
   }
 
   updateData(targetCheckInData: TargetCheckInData, callback: Function) {

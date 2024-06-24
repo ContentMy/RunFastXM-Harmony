@@ -1,6 +1,6 @@
 export class PageEventBus {
   private static instance: PageEventBus;
-  private events: { [key: string]: Function[] } = {};
+  private events: Map<string, Array<(data?: undefined) => void>> = new Map();
 
   private constructor() {}
 
@@ -11,20 +11,26 @@ export class PageEventBus {
     return PageEventBus.instance;
   }
 
-  public subscribe(event: string, callback: Function): void {
-    if (!this.events[event]) {
-      this.events[event] = [];
+  public subscribe(event: string, callback: (data?: undefined) => void): void {
+    if (!this.events.has(event)) {
+      this.events.set(event, []);
     }
-    this.events[event].push(callback);
+    this.events.get(event)?.push(callback);
   }
 
-  public unsubscribe(event: string, callback: Function): void {
-    if (!this.events[event]) return;
-    this.events[event] = this.events[event].filter(cb => cb !== callback);
+  public unsubscribe(event: string, callback: (data?: undefined) => void): void {
+    if (!this.events.has(event)) return;
+    const callbacks = this.events.get(event);
+    if (callbacks) {
+      this.events.set(event, callbacks.filter(cb => cb !== callback));
+    }
   }
 
-  public publish(event: string, data?: any): void {
-    if (!this.events[event]) return;
-    this.events[event].forEach(callback => callback(data));
+  public publish(event: string, data?: undefined): void {
+    if (!this.events.has(event)) return;
+    const callbacks = this.events.get(event);
+    if (callbacks) {
+      callbacks.forEach(callback => callback(data));
+    }
   }
 }
