@@ -1,6 +1,7 @@
 
 import router from '@ohos.router'
 import MemorandumData from '../common/database/data/MemorandumData';
+import MemorandumDataWithImg from '../common/database/data/MemorandumDataWithImg';
 import MemorandumTable from '../common/database/tables/MemorandumTable';
 import { PageEventBus } from '../common/utils/PageEventBus';
 @Component
@@ -74,7 +75,7 @@ export struct MemorandumComp{
           /*这部分是展示的列表内容*/
           List() {//item的间隔，起始索引值
             //数据源，item和下标
-            ForEach(this.mList, (item:MemorandumData, index) => {
+            ForEach(this.mList, (item:MemorandumDataWithImg, index) => {
               ListItem() {
                 Row(){
                   /*列表部分*/
@@ -86,7 +87,7 @@ export struct MemorandumComp{
                     .borderRadius(5)
                     .margin({top:5})
                   Column(){
-                    Text(this.getTimeString(item.memorandumCreateTime,'yyyy-MM-dd')).fontColor($r('app.color.colorGray'))
+                    Text(this.getTimeString(item.memorandumData.memorandumCreateTime,'yyyy-MM-dd')).fontColor($r('app.color.colorGray'))
                     .width('95%')//TODO：宽度和下列组件保持统一，不然会ui显示异常，后续考虑优化
                     Stack(){
                       Rect()
@@ -102,18 +103,32 @@ export struct MemorandumComp{
                           .padding(8)
                           .margin({left:10})
                         Column(){
-                          Text(item.memorandumTitle)
+                          Text(item.memorandumData.memorandumTitle)
                             .fontSize(16)
                             .alignSelf(ItemAlign.Start)
                             .flexShrink(1)
                             .fontColor($r('app.color.colorBlack'))
                             .margin({left:10})
-                          Text(item.memorandumContent)
+                          Text(item.memorandumData.memorandumContent)
                             .fontSize(10)
                             .alignSelf(ItemAlign.Start)
                             .flexShrink(1)
                             .fontColor($r('app.color.colorGray'))
                             .margin({left:10,top:10})
+
+                          Flex({
+                            justifyContent: FlexAlign.SpaceBetween,
+                            alignItems: ItemAlign.Center,
+                            wrap: FlexWrap.Wrap,
+                          }) {
+                            // 遍历图片地址数组，显示图片，仅显示前三张图片，如果小于3张，就显示全部
+                            ForEach(item.memorandumImgList.length > 3 ? item.memorandumImgList.slice(0, 3) : item.memorandumImgList, (imgPath:string, index) => {
+                              Image(imgPath)
+                                .width(20)
+                                .height(20)
+                                .margin(5)
+                            });
+                          }
                         }.layoutWeight(1)
                       }
                       .backgroundColor($r('app.color.colorGrayLight'))
@@ -134,7 +149,7 @@ export struct MemorandumComp{
                   }.margin({left:10})
                 }.alignItems(VerticalAlign.Top)
               }
-              .height(80)//TODO:目前是还原ui，后续进行逻辑和数据关联时，需要动态去设置背景的高度，因为目前把外部的高度定死了，后续展示的ui内容高度肯定是灵活的
+              .height(200)//TODO:目前是还原ui，后续进行逻辑和数据关联时，需要动态去设置背景的高度，因为目前把外部的高度定死了，后续展示的ui内容高度肯定是灵活的
               .margin({top:20})
             }, (item:string) => item)
           }.width('100%').height('100%')

@@ -1,15 +1,33 @@
 
 import relationalStore from '@ohos.data.relationalStore';
 import { CommonConstants } from '../../contants/CommonConstants';
+import { logger } from '../../utils/logger';
 import AppDatabase from '../AppDatabase';
 import MemorandumData from '../data/MemorandumData';
+import MemorandumDataWithImg from '../data/MemorandumDataWithImg';
+import MemorandumImgData from '../data/MemorandumImgData';
+import MemorandumImgTable from './MemorandumImgTable';
+
 export default class MemorandumTable{
-  private memorandumTable = new AppDatabase(CommonConstants.MEMORANDUM_TABLE.tableName, CommonConstants.MEMORANDUM_TABLE.sqlCreate,
-    CommonConstants.MEMORANDUM_TABLE.columns);
+  private memorandumTable: AppDatabase;
+  private memorandumImgTable: MemorandumImgTable | undefined;
 
   constructor(callback: Function = () => {
   }) {
-    this.memorandumTable.getRdbStore(callback);
+    logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'Initializing MemorandumTable');
+    this.memorandumTable = new AppDatabase(
+      CommonConstants.MEMORANDUM_TABLE.tableName,
+      CommonConstants.MEMORANDUM_TABLE.sqlCreate,
+      CommonConstants.MEMORANDUM_TABLE.columns
+    );
+
+    this.memorandumTable.getRdbStore(() => {
+      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'MemorandumTable initialized');
+      this.memorandumImgTable = new MemorandumImgTable(() => {
+        logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'MemorandumImgTable initialized');
+        callback();
+      });
+    });
   }
 
 
@@ -17,6 +35,7 @@ export default class MemorandumTable{
   }) {
     this.memorandumTable.getRdbStore(callback);
   }
+
   insertData(memorandum: MemorandumData, callback: Function) {
     const valueBucket: relationalStore.ValuesBucket = generateBucket(memorandum);
     this.memorandumTable.insertData(valueBucket, callback);
@@ -49,7 +68,7 @@ export default class MemorandumTable{
         callback([]);
       } else {
         resultSet.goToFirstRow();
-        const result: MemorandumData[] = [];
+        const result: MemorandumDataWithImg[] = [];
         for (let i = 0; i < count; i++) {
           let tmp: MemorandumData = {
             id: 0, memorandumIcon:'', memorandumTitle:'', memorandumContent:'', memorandumCreateTime:0,
@@ -60,7 +79,32 @@ export default class MemorandumTable{
           tmp.memorandumContent = resultSet.getString(resultSet.getColumnIndex('memorandumContent'));
           tmp.memorandumCreateTime = resultSet.getLong(resultSet.getColumnIndex('memorandumCreateTime'));
           tmp.memorandumUpdateTime = resultSet.getLong(resultSet.getColumnIndex('memorandumUpdateTime'));
-          result[i] = tmp;
+
+          // 查询对应item的图片数据
+          if (this.memorandumImgTable) {
+            this.memorandumImgTable.query(tmp.id, (checkInResultSet: relationalStore.ResultSet) => {
+              let checkInResults: string[] = [];
+              if (checkInResultSet != null && checkInResultSet.rowCount > 0) {
+                logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG, `图片数据：${checkInResultSet.rowCount}}`);
+                checkInResultSet.goToFirstRow();
+                do {
+                  let checkInData: MemorandumImgData = {
+                    id: checkInResultSet.getDouble(checkInResultSet.getColumnIndex('id')),
+                    memorandumId: checkInResultSet.getDouble(checkInResultSet.getColumnIndex('memorandumId')),
+                    memorandumImgFilePath : checkInResultSet.getString(checkInResultSet.getColumnIndex('memorandumImgFilePath'))
+                  };
+                  checkInResults.push(checkInData.memorandumImgFilePath);
+                } while (checkInResultSet.goToNextRow());
+              } else {
+                logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG, `图片数据：null}`);
+              }
+
+              result[i] = new MemorandumDataWithImg(tmp, checkInResults);
+              if (i === count - 1) {
+                callback(result);
+              }
+            });
+          }
           resultSet.goToNextRow();
         }
         callback(result);
