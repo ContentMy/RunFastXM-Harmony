@@ -65,4 +65,11 @@ export class CommonConstants {
     'memorandumTitle TEXT, memorandumContent TEXT, memorandumCreateTime INTEGER, memorandumUpdateTime INTEGER)',
     columns: ['id', 'memorandumIcon', 'memorandumTitle', 'memorandumContent','memorandumCreateTime', 'memorandumUpdateTime']
   };
+
+  static readonly MEMORANDUM_IMG_TABLE: DatabaseTable = {
+    tableName: 'memorandum_img_table',
+    sqlCreate: 'CREATE TABLE IF NOT EXISTS memorandum_img_table(id INTEGER PRIMARY KEY AUTOINCREMENT, memorandumId INTEGER, ' +
+      'memorandumImgFilePath TEXT)',
+    columns: ['id', 'memorandumId', 'memorandumImgFilePath']
+  };
 }
