@@ -68,7 +68,18 @@ hvigorfile.ts：模块级编译构建任务脚本，开发者可以自定义相�
       }
     ],
     //"extensionAbilities":[]//标识当前Module中ExtensionAbility的配置信息，标签值为数组类型，只对当前ExtensionAbility生效，默认为空
-    //"requestPermissions":[]//标识当前应用运行时需向系统申请的权限集合,默认为空
+    "requestPermissions":[
+      {
+        "name": "ohos.permission.PUBLISH_AGENT_REMINDER",
+        "reason": "$string:app_description",
+        "usedScene": {
+          "abilities": [
+            "EntryFormAbility"
+          ],
+          "when": "always"
+        }
+      }
+    ]//标识当前应用运行时需向系统申请的权限集合,默认为空
     //"testRunner":[]//标识当前Module用于支持对测试框架的配置，默认为空
   }
 }

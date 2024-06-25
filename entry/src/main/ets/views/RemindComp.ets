@@ -5,6 +5,10 @@ import RemindData from '../common/database/data/RemindData'
 import RemindTable from '../common/database/tables/RemindTable'
 import { logger } from '../common/utils/logger'
 import { RemindDialog } from '../dialogs/RemindDialog'
+import reminderAgentManager from '@ohos.reminderAgentManager';
+import { BusinessError } from '@kit.BasicServicesKit'
+import { notificationManager } from '@kit.NotificationKit'
+
 @Component
 @Preview
 export struct RemindComp{
@@ -46,6 +50,39 @@ export struct RemindComp{
       remindData.id = id;// 将数据库生成的自增 ID 赋值给 remindData 对象的 id 属性
       this.mList.push(remindData)//数据加入当前页面的缓存
       //TODO：这里后续在入库时，开启通知
+      this.enableNotification(remindData)
+    });
+  }
+  async enableNotification(remindData: RemindData) {
+    try {
+      await notificationManager.requestEnableNotification();
+      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, `enableNotification success`);
+      this.setReminder(remindData)
+    } catch (err) {
+      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, `enableNotification err ${JSON.stringify(err)}`);
+    }
+  }
+
+  // 设置提醒任务
+  setReminder(remindData: RemindData) {
+    logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,'发送通知')
+    let timer: reminderAgentManager.ReminderRequestTimer = {
+      reminderType: reminderAgentManager.ReminderType.REMINDER_TYPE_TIMER,//闹钟最短的提醒时长为5分钟，满足当前的业务逻辑，后续如果出了自定义时间的设定，这里也需要跟着优化
+      triggerTimeInSeconds:10,//倒计时时长/s
+      title: remindData.remindTitle,
+      content:'提醒时间到了哦！',
+      wantAgent: {     // 点击提醒通知后跳转的目标UIAbility信息
+        pkgName: 'com.existmg.runfastxm',
+        abilityName: 'EntryAbility',//关于点击跳转传参的api在12才有，目前仅是点击跳转到Ability
+      }
+    }
+    reminderAgentManager.publishReminder(timer, (err: BusinessError, reminderId: number) => {
+      if (err) {
+        logger.error(CommonConstants.RUN_FAST_XM_DB_TAG,"callback err code:" + err.code + " message:" + err.message);
+      } else {
+        logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,"callback, reminderId = " + reminderId);
+
+      }
     });
   }
 
