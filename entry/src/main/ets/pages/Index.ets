@@ -102,7 +102,7 @@ struct Index {//
         // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       })
     }
-    // .divider({ strokeWidth: $r('app.float.common_border_width'), color: $r('app.color.colorGray') })
+    .divider({ strokeWidth: 0.5, color: $r('app.color.colorGray')})
     .vertical(this.isLandscape)//表示tabContent与tabs的排列位置，true为左右排列，false为上下排列
     .barPosition(this.isLandscape ? BarPosition.Start : BarPosition.End)//表示bar的位置，上下排列的话，BarPosition.Start为顶部，BarPosition.End为底部，如果左右排列则为前后
     // .onTabBarClick((index) => {

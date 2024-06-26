@@ -183,8 +183,6 @@ export struct TargetComp{
           console.info('Invoke pushUrl succeeded.')
         })
       })
-      /*外层的tabs目前版本没有开放divider，所以在每个组件页面的底部增加一个divider*/
-      Divider().strokeWidth(0.5).color($r('app.color.colorGray'))
     }.width('100%')//宽度占满屏幕
     .height('100%')
     .padding({left:10,right:10})
