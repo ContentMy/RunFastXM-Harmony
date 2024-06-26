@@ -6,5 +6,6 @@ export default  class RemindData{
   remindTime: number = 0;
   remindStartTime: number = 0;
   remindEndTime: number = 0;
-  remindCompleteStatus: boolean = false;
+  remindCompleteStatus: boolean = false
+  reminderAgentId: number = 0;
 }

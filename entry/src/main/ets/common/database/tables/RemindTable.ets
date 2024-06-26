@@ -46,10 +46,7 @@ export default class RemindTable{
         resultSet.goToFirstRow();
         const result: RemindData[] = [];
         for (let i = 0; i < count; i++) {
-          let tmp: RemindData = {
-            id: 0, remindImg:'', remindTitle:'', remindContent:'', remindTime:0,
-            remindStartTime:0, remindEndTime:0, remindCompleteStatus:false
-          };
+          let tmp: RemindData = new RemindData();
           tmp.id = resultSet.getDouble(resultSet.getColumnIndex('id'));
           tmp.remindImg = resultSet.getString(resultSet.getColumnIndex('remindImg'));
           tmp.remindTitle = resultSet.getString(resultSet.getColumnIndex('remindTitle'));

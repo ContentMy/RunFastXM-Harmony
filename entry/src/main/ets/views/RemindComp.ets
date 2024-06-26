@@ -13,7 +13,7 @@ import { notificationManager } from '@kit.NotificationKit'
 @Preview
 export struct RemindComp{
   @State mList:Array<RemindData> = []
-  @State mRemindData:RemindData = {id:0,remindImg:'',remindTitle:'',remindContent:'',remindTime:0,remindStartTime:0,remindEndTime:0,remindCompleteStatus:false}
+  @State mRemindData:RemindData = new RemindData()
   private RemindTable = new RemindTable(() => {});
   dialogController: CustomDialogController = new CustomDialogController({
     builder: RemindDialog({
@@ -45,26 +45,27 @@ export struct RemindComp{
    * @Description: 这里是点击确认后关闭dialog返回的包含有效数据的RemindData，对数据进行入库操作以及加入到缓存中
    */
   onAccept(remindData: RemindData){
-    logger.info(`${CommonConstants.INDEX_TAG}`, `The remindData inserted is:  ${JSON.stringify(remindData)}`);
+    logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,`入库前的数据：${JSON.stringify(remindData)}`)
     this.RemindTable.insertData(remindData, (id: number) => {
       remindData.id = id;// 将数据库生成的自增 ID 赋值给 remindData 对象的 id 属性
       this.mList.push(remindData)//数据加入当前页面的缓存
+      logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,`入库后的数据：${JSON.stringify(remindData)}`)
       //TODO：这里后续在入库时，开启通知
-      this.enableNotification(remindData)
+      this.enableNotification(remindData,this.mList.indexOf(remindData))
     });
   }
-  async enableNotification(remindData: RemindData) {
+  async enableNotification(remindData: RemindData,index:number) {
     try {
       await notificationManager.requestEnableNotification();
       logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, `enableNotification success`);
-      this.setReminder(remindData)
+      this.setReminder(remindData,index)
     } catch (err) {
       logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, `enableNotification err ${JSON.stringify(err)}`);
     }
   }
 
   // 设置提醒任务
-  setReminder(remindData: RemindData) {
+  setReminder(remindData: RemindData,index:number) {
     logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,'发送通知')
     let timer: reminderAgentManager.ReminderRequestTimer = {
       reminderType: reminderAgentManager.ReminderType.REMINDER_TYPE_TIMER,//闹钟最短的提醒时长为5分钟，满足当前的业务逻辑，后续如果出了自定义时间的设定，这里也需要跟着优化
@@ -74,14 +75,21 @@ export struct RemindComp{
       wantAgent: {     // 点击提醒通知后跳转的目标UIAbility信息
         pkgName: 'com.existmg.runfastxm',
         abilityName: 'EntryAbility',//关于点击跳转传参的api在12才有，目前仅是点击跳转到Ability
-      }
+      },
+      notificationId:remindData.id
     }
     reminderAgentManager.publishReminder(timer, (err: BusinessError, reminderId: number) => {
       if (err) {
         logger.error(CommonConstants.RUN_FAST_XM_DB_TAG,"callback err code:" + err.code + " message:" + err.message);
       } else {
         logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,"callback, reminderId = " + reminderId);
-
+        //更新数据库，将remindId同步到数据库中，用于删除时取消通知
+        remindData.reminderAgentId = reminderId
+        this.RemindTable.updateData(remindData, () => {
+          //数据库更新成功之后，同步缓存中remind数据
+          this.mList.fill(remindData,index,index+1)//使用fill进行元素的替换
+          logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,`同步后的数据：${JSON.stringify(this.mList)}`)
+        });
       }
     });
   }
@@ -97,6 +105,26 @@ export struct RemindComp{
     // }
   }
 
+  @Builder itemEnd(remindData:RemindData,index: number) {
+    // 构建尾端滑出组件
+    Button('删除',{ type: ButtonType.Normal })
+      .height(80)
+      .width(80)
+      .fontColor($r('app.color.colorWhite'))
+      .fontSize(12)
+      .backgroundColor($r('app.color.colorGreen'))
+      .onClick(() => {
+        //从数据库中删除指定数据
+        this.RemindTable.deleteData(remindData, () => {
+          //从缓存删除指定数据项。
+          this.mList.splice(index, 1);
+          //取消通知
+          reminderAgentManager.cancelReminder(remindData.reminderAgentId)
+        });
+      })
+  }
+
+
   build(){
     Stack({alignContent:Alignment.BottomEnd}){
       Column() {
@@ -107,12 +135,11 @@ export struct RemindComp{
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
             .layoutWeight(1)
-            .margin({left:20})
+            .margin({left:10})
           Image($r('app.media.remind_menu'))
             .width(50)
             .height(50)
             .padding(10)
-            .margin({right:10})
             .onClick(()=>{
               router.pushUrl({
                 url: 'pages/remind/RemindCompleted' // 目标url
@@ -149,14 +176,20 @@ export struct RemindComp{
                     .flexShrink(1)
                     .margin({left:10})
                 }
+                .height(80)
+                .backgroundColor($r('app.color.colorGreenMidNextLight'))
+                .borderColor($r('app.color.colorBlack'))
+                .borderWidth(1)
+                .borderRadius(10)
+                .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:5,offsetY:5})
+                .margin({left:10,right:10})
               }
-              .height(80)
-              .backgroundColor($r('app.color.colorGreenMidNextLight'))
-              .borderColor($r('app.color.colorBlack'))
-              .borderWidth(1)
-              .borderRadius(10)
-              .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:5,offsetY:5})
-              .margin({left:20,right:20})
+              .swipeAction({
+                end: {
+                  // index为该ListItem在List中的索引值。
+                  builder: () => { this.itemEnd(item,index) },
+                }
+              })
 
             }, (item:string) => item)
           }.width('100%').height('100%')
@@ -184,5 +217,6 @@ export struct RemindComp{
       Divider().strokeWidth(0.5).color($r('app.color.colorGray'))
     }.width('100%')//宽度占满屏幕
     .height('100%')
+    .padding({left:10,right:10})
   }
 }
