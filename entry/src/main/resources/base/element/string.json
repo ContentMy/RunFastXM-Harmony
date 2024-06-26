@@ -185,6 +185,10 @@
       "value": "目标名称不能为空"
     },
     {
+      "name": "target_time_choose_error_desc",
+      "value": "目标结束时间不能比目标开始时间早哦"
+    },
+    {
       "name": "memorandum_create_title_null_desc",
       "value": "记录下心情才能保存哦"
     }

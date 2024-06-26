@@ -14,14 +14,15 @@ struct TargetCreate {
   @State targetContentValue:string = ''
   @State targetStatusString:string = ''
   @State targetStartTime:number = Date.now()
+  @State targetStartDate:Date = new Date()
   @State targetEndTime:number = 0;
+  @State targetEndDate:Date = new Date()
   @State targetImgArr: Resource[] = [$r('app.media.ui_icon_sleep'), $r('app.media.ui_icon_sun'),$r('app.media.ui_icon_breakfast'),$r('app.media.ui_icon_lunch'),
     $r('app.media.ui_icon_dinner'), $r('app.media.ui_icon_study'), $r('app.media.ui_icon_write'), $r('app.media.ui_icon_work'), $r('app.media.ui_icon_running'),
       $r('app.media.ui_icon_ride'), $r('app.media.ui_icon_swimming'), $r('app.media.ui_icon_soccer')]
   @State chooseImgIndex:number = 0
   @State targetStatusArr:string[] = ['暂不设置','早晨','上午','中午','下午','晚上','深夜']
   @State chooseStatusIndex:number = 0
-
   @State mTargetData:TargetData = {id:0,targetImg:'',targetTitle:'',targetContent:'',targetStatus:0,targetStartTime:0,targetEndTime:0,targetIsRemind:false}
   private TargetTable = new TargetTable(() => {});
 
@@ -124,6 +125,16 @@ struct TargetCreate {
           .width(12)
           .margin({left:6})
       }.width('100%').height(50).margin({top:10}).padding({left:10,right:10})
+      .onClick(()=>{
+        //时间选择器，选择目标的开始时间
+        CalendarPickerDialog.show({
+          selected: this.targetStartDate,
+          onAccept: (value) => {
+            this.targetStartDate = value
+            this.targetStartTime = value.getTime()
+          },
+        })
+      })
       /*这里是目标结束时间组件ui部分*/
       Row(){
         Image($r('app.media.ui_small_icon_end_time'))
@@ -140,6 +151,16 @@ struct TargetCreate {
           .width(12)
           .margin({left:6})
       }.width('100%').height(50).margin({top:10}).padding({left:10,right:10})
+      .onClick(()=>{
+        //时间选择器，选择目标的结束时间
+        CalendarPickerDialog.show({
+          selected: this.targetEndDate,
+          onAccept: (value) => {
+            this.targetEndDate = value
+            this.targetEndTime = value.getTime()
+          },
+        })
+      })
       /*这里是目标状态组件ui部分*/
       Row(){
         Image($r('app.media.ui_small_icon_calendar'))
@@ -156,7 +177,7 @@ struct TargetCreate {
           .width(12)
           .margin({left:6})
           .visibility(Visibility.Hidden)
-      }.width('100%').margin({top:10}).padding({left:10,right:10})
+      }.width('100%').height(50).margin({top:10}).padding({left:10,right:10})
       List({space:10, initialIndex:0}){
         //数据源，item和下标
         ForEach(this.targetStatusArr, (item:string, index) => {
@@ -164,7 +185,7 @@ struct TargetCreate {
             //布局方向，item对齐方式
             Flex({direction: FlexDirection.Row, alignItems: ItemAlign.Center}) {
               Text(item)
-                .fontSize(10)
+                .fontSize(14)
                 .fontColor(this.chooseStatusIndex === index ?$r('app.color.colorWhite'):$r('app.color.colorBlack'))
                 .textAlign(TextAlign.Center)
                 .flexShrink(1)
@@ -178,11 +199,13 @@ struct TargetCreate {
           .borderWidth(0.5)
           .borderColor($r('app.color.colorBlack'))
           .padding({top:4,bottom:4,left:8,right:8})
+          .margin({top:4})
         }, (item:string) => item)
       }
       .width('100%')
-      .height(20)
-      .margin({ left: 30,top:10 })
+      .height(30)
+      .scrollBar(BarState.Off)
+      .margin({ left: 20})
       .listDirection(Axis.Horizontal)
       /*这里是content提示的部分*/
       Row(){
@@ -217,8 +240,14 @@ struct TargetCreate {
               promptAction.showToast({message: $r('app.string.target_create_title_null_desc'),duration: 2000})
               return;
             }
+            if (this.targetEndTime != 0 && this.targetEndTime < this.targetStartTime){//0L代表永不结束
+              promptAction.showToast({message: $r('app.string.target_time_choose_error_desc'),duration: 2000})
+              return
+            }
             this.mTargetData.targetTitle = this.targetTitleValue
             this.mTargetData.targetContent = this.targetContentValue
+            this.mTargetData.targetStartTime = this.targetStartTime
+            this.mTargetData.targetEndTime = this.targetEndTime
             this.mTargetData.targetImg = this.getImgString()
             this.TargetTable.insertData(this.mTargetData, (id: number) => {
               PageEventBus.getInstance().publish('refreshTargetComp');
