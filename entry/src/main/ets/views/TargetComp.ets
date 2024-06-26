@@ -46,6 +46,23 @@ export struct TargetComp{
     })
   }
 
+  @Builder itemEnd(targetData:TargetData,index: number) {
+    // 构建尾端滑出组件
+    Button('删除',{ type: ButtonType.Normal })
+      .height(80)
+      .width(100)
+      .fontColor($r('app.color.colorWhite'))
+      .fontSize(12)
+      .backgroundColor($r('app.color.colorGreen'))
+      .onClick(() => {
+        //从数据库中删除指定数据
+        this.TargetTable.deleteData(targetData, () => {
+          //从缓存删除指定数据项。
+          this.mList.splice(index, 1);
+        });
+      })
+  }
+
   build(){
     Stack({alignContent:Alignment.BottomEnd}){
       Column() {
@@ -56,12 +73,11 @@ export struct TargetComp{
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
             .layoutWeight(1)
-            .margin({left:20})
+            .margin({left:10})
           Image($r('app.media.remind_menu'))
             .width(50)
             .height(50)
             .padding(10)
-            .margin({right:10})
             .visibility(Visibility.None)
         }
         .width('100%')
@@ -123,15 +139,21 @@ export struct TargetComp{
                       this.checkInTarget(item.targetCheckInStatus)
                     })
                 }
+                .height(80)
+                .backgroundColor($r('app.color.colorGreenMidNext'))
+                .borderColor($r('app.color.colorBlack'))
+                .borderWidth(1)
+                .borderRadius(10)
+                .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:5,offsetY:5})
+                .margin({left:10,right:10})
               }
-              .height(80)
-              .backgroundColor($r('app.color.colorGreenMidNext'))
-              .borderColor($r('app.color.colorBlack'))
-              .borderWidth(1)
-              .borderRadius(10)
-              .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:5,offsetY:5})
-              .margin({left:20,right:20})
-
+              .swipeAction({
+                end: {
+                  // index为该ListItem在List中的索引值。
+                  builder: () => { this.itemEnd(item.targetData,index) },
+                  //TODO：需要处理在左滑状态下，如果切换到其他页面，左滑状态无法结束的问题
+                }
+              })
             }, (item:string) => item)
           }.width('100%').height('100%')
           /*这部分是没有列表数据时的默认占位内容*/
@@ -148,7 +170,7 @@ export struct TargetComp{
 
       Button({ type: ButtonType.Circle, stateEffect: true }) {
         Image($r('app.media.base_add')).width(20).height(20).align(Alignment.Center)
-      }.width(55).height(55).backgroundColor($r('app.color.colorGreen')).margin(20)
+      }.width(55).height(55).backgroundColor($r('app.color.colorGreen')).margin(10)
       .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:2,offsetY:2})
       .onClick((event:ClickEvent)=>{
         router.pushUrl({
@@ -165,6 +187,7 @@ export struct TargetComp{
       Divider().strokeWidth(0.5).color($r('app.color.colorGray'))
     }.width('100%')//宽度占满屏幕
     .height('100%')
+    .padding({left:10,right:10})
   }
   private getImgResourceFromString(imgString:string):Resource{
     let resource:Resource

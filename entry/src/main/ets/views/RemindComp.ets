@@ -52,6 +52,8 @@ export struct RemindComp{
       logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,`入库后的数据：${JSON.stringify(remindData)}`)
       //TODO：这里后续在入库时，开启通知
       this.enableNotification(remindData,this.mList.indexOf(remindData))
+      //TODO: 这里同步也要开始计算结束时间的状态切换
+
     });
   }
   async enableNotification(remindData: RemindData,index:number) {
@@ -109,7 +111,7 @@ export struct RemindComp{
     // 构建尾端滑出组件
     Button('删除',{ type: ButtonType.Normal })
       .height(80)
-      .width(80)
+      .width(100)
       .fontColor($r('app.color.colorWhite'))
       .fontSize(12)
       .backgroundColor($r('app.color.colorGreen'))
@@ -207,7 +209,7 @@ export struct RemindComp{
 
       Button({ type: ButtonType.Circle, stateEffect: true }) {
         Image($r('app.media.base_add')).width(20).height(20).align(Alignment.Center)
-      }.width(55).height(55).backgroundColor($r('app.color.colorGreen')).margin(20)
+      }.width(55).height(55).backgroundColor($r('app.color.colorGreen')).margin(10)
       .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:2,offsetY:2})
       .onClick(()=>{
         /*点击+号按钮进行提醒的添加*/
