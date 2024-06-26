@@ -194,7 +194,7 @@ export struct RemindComp{
               })
 
             }, (item:string) => item)
-          }.width('100%').height('100%')
+          }.width('100%').height('100%').scrollBar(BarState.Off)
           /*这部分是没有列表数据时的默认占位内容*/
           Text($r('app.string.remind_default_desc'))
             .fontColor($r('app.color.colorGreen'))

@@ -63,7 +63,6 @@ struct TargetCreate {
         .fontSize(14)
         .borderRadius(5)
         .backgroundColor($r('app.color.colorGrayLight'))
-        .style(TextInputStyle.Inline)
         .margin({top:18})
         .onChange((value: string) => {
           this.targetTitleValue = value
@@ -102,10 +101,11 @@ struct TargetCreate {
           .onClick(()=>{
             this.getImgResourceFromIndex(index)
           })
-        }, (item:string) => item)
+        })
       }
       .width('100%')
       .height(50)
+      .scrollBar(BarState.Off)
       .margin({top:10,left:10,right:10})
       .listDirection(Axis.Horizontal)
       /*这里是目标开始时间组件ui部分*/
