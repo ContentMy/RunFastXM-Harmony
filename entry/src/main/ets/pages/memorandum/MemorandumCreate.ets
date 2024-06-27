@@ -124,7 +124,6 @@ struct MemorandumCreate {
           .backgroundColor($r('app.color.colorGrayLight'))
           .padding(10)
           .borderRadius(6)
-          .margin(10)
           .onChange((value: string) => {
             this.memorandumTitleValue = value
           })
