@@ -76,7 +76,7 @@ export struct MemorandumComp{
           List() {//item的间隔，起始索引值
             //数据源，item和下标
             ForEach(this.mList, (item:MemorandumDataWithImg, index) => {
-              ListItem() {
+              ListItem() {//这里的布局高度目前没有办法像Android一样包裹，使用auto会直接撑满,所以暂时的方案为根据有图或者无图的情况去加载不同的高度
                 Row(){
                   /*列表部分*/
                   /*时间点实现部分*/
@@ -96,25 +96,25 @@ export struct MemorandumComp{
                         .fill($r('app.color.colorGreen'))
                         .radius(10)
                         .margin({top:6,left:6})
-                      Flex({direction: FlexDirection.Row, alignItems: ItemAlign.Center}) {
+                      Flex({direction: FlexDirection.Row,alignItems: ItemAlign.Start}) {
                         Image($r('app.media.ui_icon_sleep'))
                           .width(50)
                           .height(50)
-                          .padding(8)
-                          .margin({left:10})
+                          .padding(5)
+                          .margin({left:10,top:10})
                         Column(){
                           Text(item.memorandumData.memorandumTitle)
                             .fontSize(16)
                             .alignSelf(ItemAlign.Start)
                             .flexShrink(1)
                             .fontColor($r('app.color.colorBlack'))
-                            .margin({left:10})
+                            .margin({left:10,top:5})
                           Text(item.memorandumData.memorandumContent)
-                            .fontSize(10)
+                            .fontSize(12)
                             .alignSelf(ItemAlign.Start)
                             .flexShrink(1)
                             .fontColor($r('app.color.colorGray'))
-                            .margin({left:10,top:10})
+                            .margin({left:10,top:5})
 
                           Flex({
                             justifyContent: FlexAlign.SpaceBetween,
@@ -124,12 +124,12 @@ export struct MemorandumComp{
                             // 遍历图片地址数组，显示图片，仅显示前三张图片，如果小于3张，就显示全部
                             ForEach(item.memorandumImgList.length > 3 ? item.memorandumImgList.slice(0, 3) : item.memorandumImgList, (imgPath:string, index) => {
                               Image(imgPath)
-                                .width(20)
-                                .height(20)
+                                .width(50)
+                                .height(50)
                                 .margin(5)
                             });
                           }
-                        }.layoutWeight(1)
+                        }.layoutWeight(1).margin({left:10,top:10})
                       }
                       .backgroundColor($r('app.color.colorGrayLight'))
                       .width('95%')
@@ -137,7 +137,10 @@ export struct MemorandumComp{
                       .borderRadius(10)
                     }.margin({top:10}).layoutWeight(1).onClick(()=>{
                       router.pushUrl({
-                        url: 'pages/memorandum/MemorandumDetail' // 目标url
+                        url: 'pages/memorandum/MemorandumDetail', // 目标url
+                        params: {
+                          data: item
+                        }
                       }, router.RouterMode.Standard, (err) => {
                         if (err) {
                           console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
@@ -149,7 +152,7 @@ export struct MemorandumComp{
                   }.margin({left:10})
                 }.alignItems(VerticalAlign.Top)
               }
-              .height(200)//TODO:目前是还原ui，后续进行逻辑和数据关联时，需要动态去设置背景的高度，因为目前把外部的高度定死了，后续展示的ui内容高度肯定是灵活的
+              .height(item.memorandumImgList.length === 0 ? 100 : 150)//TODO:目前是还原ui，后续进行逻辑和数据关联时，需要动态去设置背景的高度，因为目前把外部的高度定死了，后续展示的ui内容高度肯定是灵活的
               .margin({top:20})
             }, (item:string) => item)
           }.width('100%').height('100%').scrollBar(BarState.Off)

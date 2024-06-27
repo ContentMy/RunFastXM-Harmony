@@ -84,7 +84,6 @@ struct MemorandumCreate {
           .backgroundColor($r('app.color.colorGreen'))
           .width(50)
           .borderRadius(6)
-          .margin(10)
           .onClick(()=>{
             try{
               console.log('点击了按钮');
@@ -113,74 +112,77 @@ struct MemorandumCreate {
               logger.error(e)
             }
           })
+          .margin({right:10})
       }
       .width('100%')
       .height(50)
-      /*这里是输入框组件内容*/
-      TextInput({placeholder:$r('app.string.memorandum_input_default_desc'),text:this.memorandumTitleValue})
-        .width('100%')
-        .fontColor($r('app.color.colorGray'))
-        .backgroundColor($r('app.color.colorGrayLight'))
-        .padding(10)
-        .borderRadius(6)
-        .margin(10)
-        .onChange((value: string) => {
-          this.memorandumTitleValue = value
-        })
-      /*这里是内容输入提示的组件*/
-      Text($r('app.string.memorandum_content_desc'))
-        .fontColor($r('app.color.colorGray'))
-        .fontSize(12)
-        .width('95%')
-        .margin({ top:10 })
-      /*这里是内容输入框组件*/
-      TextInput({placeholder:$r('app.string.memorandum_content_default_desc'),text:this.memorandumContentValue})
-        .width('100%')
-        .height(200)
-        .align(Alignment.TopStart)
-        .fontColor($r('app.color.colorGray'))
-        .backgroundColor($r('app.color.colorGrayLight'))
-        .padding(10)
-        .borderRadius(6)
-        .margin(10)
-        .onChange((value: string) => {
-          this.memorandumContentValue = value
-        })
-      /*这里是添加图片列表提示的组件*/
-      Text($r('app.string.memorandum_resource_img_desc'))
-        .fontColor($r('app.color.colorGray'))
-        .fontSize(12)
-        .width('95%')
-        .margin({ top:10 })
-      /*这里是添加图片列表组件*/
-      //首先是一个加载9宫格的图片列表组件
-      //然后是如果图片地址的数组长度为0，那么添加一个默认的图片用于点击添加下一个图片
-      //首先删除最后一个图片（这个是用于添加图片的默认图片按钮），添加完图片后，如果数组长度小于9，那么追加一个默认图片
-      Flex({
-        justifyContent: FlexAlign.SpaceBetween,
-        alignItems: ItemAlign.Center,
-        wrap: FlexWrap.Wrap,
-      }) {
-        // 遍历图片地址数组，显示图片
-        ForEach(this.imgPathList, (imgPath:string, index) => {
-          Image(imgPath)
-            .width(100)
-            .height(100)
-            .margin(5)
-        });
+      Column(){
+        /*这里是输入框组件内容*/
+        TextInput({placeholder:$r('app.string.memorandum_input_default_desc'),text:this.memorandumTitleValue})
+          .width('100%')
+          .fontColor($r('app.color.colorGray'))
+          .backgroundColor($r('app.color.colorGrayLight'))
+          .padding(10)
+          .borderRadius(6)
+          .margin(10)
+          .onChange((value: string) => {
+            this.memorandumTitleValue = value
+          })
+        /*这里是内容输入提示的组件*/
+        Text($r('app.string.memorandum_content_desc'))
+          .fontColor($r('app.color.colorGray'))
+          .fontSize(12)
+          .width('95%')
+          .margin({ top:10 })
+        /*这里是内容输入框组件*/
+        TextInput({placeholder:$r('app.string.memorandum_content_default_desc'),text:this.memorandumContentValue})
+          .width('100%')
+          .height(200)
+          .align(Alignment.TopStart)
+          .fontColor($r('app.color.colorGray'))
+          .backgroundColor($r('app.color.colorGrayLight'))
+          .padding(10)
+          .borderRadius(6)
+          .margin(10)
+          .onChange((value: string) => {
+            this.memorandumContentValue = value
+          })
+        /*这里是添加图片列表提示的组件*/
+        Text($r('app.string.memorandum_resource_img_desc'))
+          .fontColor($r('app.color.colorGray'))
+          .fontSize(12)
+          .width('95%')
+          .margin({ top:10 })
+        /*这里是添加图片列表组件*/
+        //首先是一个加载9宫格的图片列表组件
+        //然后是如果图片地址的数组长度为0，那么添加一个默认的图片用于点击添加下一个图片
+        //首先删除最后一个图片（这个是用于添加图片的默认图片按钮），添加完图片后，如果数组长度小于9，那么追加一个默认图片
+        Flex({
+          justifyContent: FlexAlign.SpaceBetween,
+          alignItems: ItemAlign.Center,
+          wrap: FlexWrap.Wrap,
+        }) {
+          // 遍历图片地址数组，显示图片
+          ForEach(this.imgPathList, (imgPath:string, index) => {
+            Image(imgPath)
+              .width(100)
+              .height(100)
+              .margin(5)
+          });
 
-        // 如果图片数量小于最大数量，显示添加图片按钮
-        if (this.imgPathList.length < this.maxImageCount) {
-          Image($r('app.media.user_select'))
-            .width(100)
-            .height(100)
-            .margin(5)
-            .onClick(() => {
-              this.callFilePickerSelectImage();
-            });
+          // 如果图片数量小于最大数量，显示添加图片按钮
+          if (this.imgPathList.length < this.maxImageCount) {
+            Image($r('app.media.user_select'))
+              .width(100)
+              .height(100)
+              .margin(5)
+              .onClick(() => {
+                this.callFilePickerSelectImage();
+              });
+          }
         }
-      }
-      .width('100%');
-    }
+      }.width('100%')
+      .padding({left:10,right:10})
+    }.width('100%')
   }
 }
