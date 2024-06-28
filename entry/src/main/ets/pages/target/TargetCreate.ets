@@ -4,6 +4,7 @@ import TargetData from '../../common/database/data/TargetData'
 import TargetTable from '../../common/database/tables/TargetTable'
 import { logger } from '../../common/utils/logger'
 import { PageEventBus } from '../../common/utils/PageEventBus'
+import { CommonConstants } from '../../common/contants/CommonConstants'
 
 @Entry
 @Component
@@ -25,6 +26,22 @@ struct TargetCreate {
   @State chooseStatusIndex:number = 0
   @State mTargetData:TargetData = {id:0,targetImg:'',targetTitle:'',targetContent:'',targetStatus:0,targetStartTime:0,targetEndTime:0,targetIsRemind:false}
   private TargetTable = new TargetTable(() => {});
+  @State isCreate:boolean = true;
+
+
+  onPageShow(): void {
+    const params = router.getParams() as Record<string, TargetData>; // 获取传递过来的参数对象
+    if (params) {
+      this.isCreate = false
+      const data:TargetData = params.data as TargetData; // 获取data属性的值
+      this.targetTitleValue = data.targetTitle
+      this.targetContentValue = data.targetContent
+      this.targetStartTime = data.targetStartTime
+      this.targetEndTime = data.targetEndTime
+      this.chooseStatusIndex = data.targetStatus
+      this.chooseImgIndex = this.getTargetImgIndex(data.targetImg)
+    }
+  }
 
   build() {
     Column(){
@@ -37,7 +54,7 @@ struct TargetCreate {
           .onClick(()=>{
             router.back()
           })
-        Text($r('app.string.target_create_title_new_desc'))
+        Text(this.isCreate?$r('app.string.target_create_title_new_desc'):$r('app.string.target_create_title_edit_desc'))
           .fontColor($r('app.color.colorBlack'))
           .fontSize(16)
           .layoutWeight(1)
@@ -249,10 +266,19 @@ struct TargetCreate {
             this.mTargetData.targetStartTime = this.targetStartTime
             this.mTargetData.targetEndTime = this.targetEndTime
             this.mTargetData.targetImg = this.getImgString()
-            this.TargetTable.insertData(this.mTargetData, (id: number) => {
-              PageEventBus.getInstance().publish('refreshTargetComp');
-              router.back()
-            });
+            if (this.isCreate) {
+              this.TargetTable.insertData(this.mTargetData, (id: number) => {
+                logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,'新建目标插入成功')
+                PageEventBus.getInstance().publish('refreshTargetComp');
+                router.back()
+              });
+            }else {
+              this.TargetTable.updateData(this.mTargetData, (id: number) => {
+                logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,'修改目标更新成功'+JSON.stringify(this.mTargetData))
+                PageEventBus.getInstance().publish('refreshTargetComp');
+                router.back()
+              });
+            }
           }catch (e){
             logger.error(e)
           }
@@ -303,6 +329,52 @@ struct TargetCreate {
         break;
     }
     return imgString
+  }
+
+  private getTargetImgIndex(imgString:string):number{
+    let index:number = 0;
+    switch (imgString) {
+      case 'ui_icon_sleep':
+        index = 0
+        break;
+      case 'ui_icon_sun':
+        index = 1
+        break;
+      case 'ui_icon_breakfast':
+        index = 2
+        break;
+      case 'ui_icon_lunch':
+        index = 3
+        break;
+      case 'ui_icon_dinner':
+        index = 4
+        break;
+      case 'ui_icon_study':
+        index = 5
+        break;
+      case 'ui_icon_write':
+        index = 6
+        break;
+      case 'ui_icon_work':
+        index = 7
+        break;
+      case 'ui_icon_running':
+        index = 8
+        break;
+      case 'ui_icon_ride':
+        index = 9
+        break;
+      case 'ui_icon_swimming':
+        index = 10
+        break;
+      case 'ui_icon_soccer':
+        index = 11
+        break;
+      default:
+        index = 0
+        break;
+    }
+    return index
   }
 
   private getImgResourceFromIndex(index:number){

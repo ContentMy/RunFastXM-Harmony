@@ -8,6 +8,7 @@ import { PageEventBus } from '../common/utils/PageEventBus'
 import { logger } from '../common/utils/logger'
 import { CommonConstants } from '../common/contants/CommonConstants'
 import TargetDataWithCheckIn from '../common/database/data/TargetDataWithCheckIn'
+import { JSON } from '@kit.ArkTS'
 
 @Component
 @Preview
@@ -32,6 +33,7 @@ export struct TargetComp{
   refreshPage(){
     try{
       this.TargetTable.queryWithCheckInStatus(0, (result: TargetDataWithCheckIn[]) => {
+        logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,'刷新数据' + JSON.stringify(result))
         this.mList = result;
       }, true);
     }catch (e){
@@ -146,6 +148,20 @@ export struct TargetComp{
                 .borderRadius(10)
                 .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:5,offsetY:5})
                 .margin({left:10,right:10})
+                .onClick(()=>{
+                  router.pushUrl({
+                    url: 'pages/target/TargetCreate', // 目标url
+                    params: {
+                      data: item.targetData
+                    }
+                  }, router.RouterMode.Standard, (err) => {
+                    if (err) {
+                      console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+                      return;
+                    }
+                    console.info('Invoke pushUrl succeeded.')
+                  })
+                })
               }
               .swipeAction({
                 end: {

@@ -1,9 +1,5 @@
 import router from '@ohos.router'
-import MemorandumData from '../../common/database/data/MemorandumData';
 import MemorandumDataWithImg from '../../common/database/data/MemorandumDataWithImg';
-import MemorandumImgData from '../../common/database/data/MemorandumImgData';
-import MemorandumImgTable from '../../common/database/tables/MemorandumImgTable';
-import MemorandumTable from '../../common/database/tables/MemorandumTable';
 
 @Entry
 @Component
@@ -79,13 +75,6 @@ struct MemorandumDetail {
           .padding(10)
           .borderRadius(6)
           .margin({ top:10 })
-        /*这里是添加图片列表提示的组件*/
-        Text($r('app.string.memorandum_resource_img_desc'))
-          .fontColor($r('app.color.colorGray'))
-          .fontSize(12)
-          .width('100%')
-          .margin({ top: 10 })
-          .visibility(this.imgPathList.length === 0 ? Visibility.None : Visibility.Visible)
         /*这里是添加图片列表组件*/
         //首先是一个加载9宫格的图片列表组件
         //然后是如果图片地址的数组长度为0，那么添加一个默认的图片用于点击添加下一个图片
@@ -102,7 +91,7 @@ struct MemorandumDetail {
               .height(100)
               .margin(5)
           });
-        }
+        }.margin({top:10})
       }.width('100%')
       .padding({ left: 10, right: 10 })
       .margin({top:20})
