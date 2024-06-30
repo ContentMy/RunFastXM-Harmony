@@ -36,7 +36,7 @@ export struct RemindComp{
   }
 
   aboutToDisappear(){
-    // this.dialogController = null // 将dialogController置空
+
   }
 
   /**
@@ -56,6 +56,7 @@ export struct RemindComp{
 
     });
   }
+
   async enableNotification(remindData: RemindData,index:number) {
     try {
       await notificationManager.requestEnableNotification();
@@ -185,6 +186,20 @@ export struct RemindComp{
                 .borderRadius(10)
                 .shadow({radius:10,color:$r('app.color.colorGray'),offsetX:5,offsetY:5})
                 .margin({left:10,right:10})
+                .onClick(()=>{
+                  router.pushUrl({
+                    url: 'pages/remind/RemindDetail',
+                    params:{
+                      data:item
+                    }// 目标url
+                  }, router.RouterMode.Standard, (err) => {
+                    if (err) {
+                      console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+                      return;
+                    }
+                    console.info('Invoke pushUrl succeeded.')
+                  })
+                })
               }
               .swipeAction({
                 end: {
