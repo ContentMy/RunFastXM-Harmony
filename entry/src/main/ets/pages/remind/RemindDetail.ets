@@ -2,7 +2,7 @@ import router from '@ohos.router'
 import RemindData from '../../common/database/data/RemindData'
 import systemDateTime from '@ohos.systemDateTime'
 import { logger } from '../../common/utils/logger'
-import { CommonConstants } from '../../common/contants/CommonConstants'
+import { CommonConstants } from '../../common/constants/CommonConstants'
 import { JSON } from '@kit.ArkTS'
 
 @Entry

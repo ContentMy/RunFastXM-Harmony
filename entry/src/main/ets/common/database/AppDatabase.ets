@@ -1,9 +1,9 @@
 import relationalStore from '@ohos.data.relationalStore';
-import { CommonConstants } from '../contants/CommonConstants';
+import { CommonConstants } from '../constants/CommonConstants';
 import { logger } from '../utils/logger';
-import {} from '@ohos.base'
-export default class AppDatabase{
 
+export default class AppDatabase {
+  private static instance: AppDatabase | null = null;
   private rdbStore: relationalStore.RdbStore | null = null;
   private tableName: string;
   private sqlCreateTable: string;
@@ -15,21 +15,34 @@ export default class AppDatabase{
     this.columns = columns;
   }
 
-  getRdbStore(callback: Function = () => {
-  }) {
-    if (!callback || typeof callback === 'undefined' || callback === undefined) {
-      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'getRdbStore() has no callback!');
-      return;
+  public static getInstance(tableName: string, sqlCreateTable: string, columns: Array<string>): AppDatabase {
+    if (!AppDatabase.instance) {
+      AppDatabase.instance = new AppDatabase(tableName, sqlCreateTable, columns);
     }
-    if (this.rdbStore !== null) {
+    return AppDatabase.instance;
+  }
+
+  private handleCallback(callback: Function | undefined) {
+    if (!callback || typeof callback !== 'function') {
+      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'Callback is not a function!');
+      return false;
+    }
+    return true;
+  }
+
+  getRdbStore(callback: Function = () => {}) {
+    if (!this.handleCallback(callback)) return;
+
+    if (this.rdbStore) {
       logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'The rdbStore exists.');
       callback();
-      return
+      return;
     }
-    let context: Context = getContext(this) as Context;
+
+    const context: Context = getContext(this) as Context;
     relationalStore.getRdbStore(context, CommonConstants.STORE_CONFIG, (err, rdb) => {
       if (err) {
-        logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `gerRdbStore() failed, err: ${err}`);
+        logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `getRdbStore() failed, err: ${err}`);
         return;
       }
       this.rdbStore = rdb;
@@ -39,19 +52,14 @@ export default class AppDatabase{
     });
   }
 
-  insertData(data: relationalStore.ValuesBucket, callback: Function = () => {
-  }) {
-    if (!callback || typeof callback === 'undefined' || callback === undefined) {
-      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'insertData() has no callback!');
-      return;
-    }
-    let resFlag: boolean = false;
-    const valueBucket: relationalStore.ValuesBucket = data;
+  insertData(data: relationalStore.ValuesBucket, callback: Function = () => {}) {
+    if (!this.handleCallback(callback)) return;
+
     if (this.rdbStore) {
-      this.rdbStore.insert(this.tableName, valueBucket, (err, ret) => {
+      this.rdbStore.insert(this.tableName, data, (err, ret) => {
         if (err) {
           logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `insertData() failed, err: ${err}`);
-          callback(resFlag);
+          callback(false);
           return;
         }
         logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, `insertData() finished: ${ret}`);
@@ -60,20 +68,18 @@ export default class AppDatabase{
     }
   }
 
-  insertDataWithResolution(data: relationalStore.ValuesBucket, resolutionMode:relationalStore.ConflictResolution, callback: Function = () => {
-  }) {
-    if (!callback || typeof callback === 'undefined' || callback === undefined) {
-      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'insertData() has no callback!');
-      return;
-    }
-    let resFlag: boolean = false;
-    const valueBucket: relationalStore.ValuesBucket = data;
+  insertDataWithResolution(
+    data: relationalStore.ValuesBucket,
+    resolutionMode: relationalStore.ConflictResolution,
+    callback: Function = () => {}
+  ) {
+    if (!this.handleCallback(callback)) return;
+
     if (this.rdbStore) {
-      //数据插入执行ON_CONFLICT_REPLACE模式，如果插入有数据的话进行替换
-      this.rdbStore.insert(this.tableName, valueBucket, resolutionMode, (err, ret) => {
+      this.rdbStore.insert(this.tableName, data, resolutionMode, (err, ret) => {
         if (err) {
           logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `insertData() failed, err: ${err}`);
-          callback(resFlag);
+          callback(false);
           return;
         }
         logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, `insertData() finished: ${ret}`);
@@ -82,57 +88,49 @@ export default class AppDatabase{
     }
   }
 
-  deleteData(predicates: relationalStore.RdbPredicates, callback: Function = () => {
-  }) {
-    if (!callback || typeof callback === 'undefined' || callback === undefined) {
-      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'deleteData() has no callback!');
-      return;
-    }
-    let resFlag: boolean = false;
+  deleteData(predicates: relationalStore.RdbPredicates, callback: Function = () => {}) {
+    if (!this.handleCallback(callback)) return;
+
     if (this.rdbStore) {
       this.rdbStore.delete(predicates, (err, ret) => {
         if (err) {
           logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `deleteData() failed, err: ${err}`);
-          callback(resFlag);
+          callback(false);
           return;
         }
         logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, `deleteData() finished: ${ret}`);
-        callback(!resFlag);
+        callback(true);
       });
     }
   }
 
-  updateData(predicates: relationalStore.RdbPredicates, data: relationalStore.ValuesBucket, callback: Function = () => {
-  }) {
-    if (!callback || typeof callback === 'undefined' || callback === undefined) {
-      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'updateDate() has no callback!');
-      return;
-    }
-    let resFlag: boolean = false;
-    const valueBucket: relationalStore.ValuesBucket = data;
+  updateData(
+    predicates: relationalStore.RdbPredicates,
+    data: relationalStore.ValuesBucket,
+    callback: Function = () => {}
+  ) {
+    if (!this.handleCallback(callback)) return;
+
     if (this.rdbStore) {
-      this.rdbStore.update(valueBucket, predicates, (err, ret) => {
+      this.rdbStore.update(data, predicates, (err, ret) => {
         if (err) {
           logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `updateData() failed, err: ${err}`);
-          callback(resFlag);
+          callback(false);
           return;
         }
         logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, `updateData() finished: ${ret}`);
-        callback(!resFlag);
+        callback(true);
       });
     }
   }
 
-  query(predicates: relationalStore.RdbPredicates, callback: Function = () => {
-  }) {
-    if (!callback || typeof callback === 'undefined' || callback === undefined) {
-      logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'query() has no callback!');
-      return;
-    }
+  query(predicates: relationalStore.RdbPredicates, callback: Function = () => {}) {
+    if (!this.handleCallback(callback)) return;
+
     if (this.rdbStore) {
       this.rdbStore.query(predicates, this.columns, (err, resultSet) => {
         if (err) {
-          logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `query() failed, err:  ${err}`);
+          logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `query() failed, err: ${err}`);
           return;
         }
         logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'query() finished.');

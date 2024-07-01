@@ -6,7 +6,7 @@ import TargetCheckInTable from '../common/database/tables/TargetCheckInTable'
 import TargetTable from '../common/database/tables/TargetTable'
 import { PageEventBus } from '../common/utils/PageEventBus'
 import { logger } from '../common/utils/logger'
-import { CommonConstants } from '../common/contants/CommonConstants'
+import { CommonConstants } from '../common/constants/CommonConstants'
 import TargetDataWithCheckIn from '../common/database/data/TargetDataWithCheckIn'
 import { JSON } from '@kit.ArkTS'
 
@@ -18,8 +18,8 @@ export struct TargetComp{
   @State mList:Array<TargetDataWithCheckIn> = []
   @State mTargetData:TargetData = new TargetData()
   @State mTargetCheckInData:TargetCheckInData = new TargetCheckInData()
-  private TargetTable = new TargetTable(() => {});
-  private TargetCheckInTable = new TargetCheckInTable(() => {});
+  private TargetTable = TargetTable.getInstance(() => {});
+  private TargetCheckInTable = TargetCheckInTable.getInstance(() => {});
 
   aboutToAppear(){//TODO:从目标新建页面返回时，这个回调不会被调用
     PageEventBus.getInstance().subscribe('refreshTargetComp', this.refreshPage.bind(this));
@@ -41,10 +41,10 @@ export struct TargetComp{
     }
   }
 
-  checkInTarget(isCheckIn:boolean){
+  checkInTarget(index:number,item:TargetDataWithCheckIn){
     this.TargetCheckInTable.insertData(this.mTargetCheckInData,() => {
-      this.checkInString = isCheckIn ? '已打卡' : '打卡'
-      console.log('Check-in data inserted successfully');
+      console.log('Check-in data inserted successfully' + JSON.stringify(item) + `\n${this.checkInString}`);
+      this.mList[index] = item
     })
   }
 
@@ -124,6 +124,8 @@ export struct TargetComp{
                     .borderRadius(10)
                     .margin({right:20})
                     .onClick(()=>{
+                      // this.checkInString = '已打卡'
+                      // TODO:已测试更改数据源也无法影响button的文本变化，猜想1：在作为参数设置的文本优先级最高，即使State修饰的可变参数变化后，依然无法影响。猜想2：在此处与更新数据源的方法处都进行了测试，均无法响应，所以考虑有没有类似Android adapter局部更新的实现
                       let time = new Date().getTime()
                       if(this.checkInInterval > 0 && time - this.checkInInterval > 1000){//限制打卡与取消打卡的间隔时间为1s
                         promptAction.showToast({message: '打卡要认真，一步一脚印', duration: 2000})
@@ -138,7 +140,8 @@ export struct TargetComp{
                         this.mTargetCheckInData.targetCancelCheckInTime = time
                       }
                       logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG,`打卡数据包：${JSON.stringify(this.mTargetCheckInData)}`)
-                      this.checkInTarget(item.targetCheckInStatus)
+                      this.checkInTarget(index,item)
+
                     })
                 }
                 .height(80)

@@ -1,6 +1,6 @@
 
 import router from '@ohos.router'
-import { CommonConstants } from '../common/contants/CommonConstants'
+import { CommonConstants } from '../common/constants/CommonConstants'
 import RemindData from '../common/database/data/RemindData'
 import RemindTable from '../common/database/tables/RemindTable'
 import { logger } from '../common/utils/logger'
@@ -14,7 +14,7 @@ import { notificationManager } from '@kit.NotificationKit'
 export struct RemindComp{
   @State mList:Array<RemindData> = []
   @State mRemindData:RemindData = new RemindData()
-  private RemindTable = new RemindTable(() => {});
+  private RemindTable = RemindTable.getInstance(() => {});
   dialogController: CustomDialogController = new CustomDialogController({
     builder: RemindDialog({
       mRemindData: $mRemindData,

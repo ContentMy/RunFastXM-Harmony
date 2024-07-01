@@ -3,8 +3,8 @@
 import mediaquery from '@ohos.mediaquery'
 import router from '@ohos.router';
 // import promptAction from
-import { TabBarItems } from '../common/contants'
-import { CommonConstants } from '../common/contants/CommonConstants'
+import { TabBarItems } from '../common/constants'
+import { CommonConstants } from '../common/constants/CommonConstants'
 import { TabBarModel } from '../models/TabBarModel'
 import { themeManager } from '../common/utils/themeManager'
 import { MemorandumComp } from '../views/MemorandumComp'

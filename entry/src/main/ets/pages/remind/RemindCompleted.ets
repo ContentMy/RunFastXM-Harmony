@@ -8,7 +8,7 @@ import RemindTable from '../../common/database/tables/RemindTable';
 struct RemindCompleted {
   @State mList:Array<RemindData> = []
   @State mRemindData:RemindData = new RemindData()
-  private RemindTable = new RemindTable(() => {});
+  private RemindTable = RemindTable.getInstance(() => {});
 
   onPageShow(){
   }

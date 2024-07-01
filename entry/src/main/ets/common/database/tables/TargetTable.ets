@@ -1,5 +1,5 @@
 import relationalStore from '@ohos.data.relationalStore';
-import { CommonConstants } from '../../contants/CommonConstants';
+import { CommonConstants } from '../../constants/CommonConstants';
 import { logger } from '../../utils/logger';
 import AppDatabase from '../AppDatabase';
 import TargetCheckInData from '../data/TargetCheckInData';
@@ -7,32 +7,35 @@ import TargetData from '../data/TargetData';
 import TargetDataWithCheckIn from '../data/TargetDataWithCheckIn';
 import TargetCheckInTable from './TargetCheckInTable';
 
-export default class TargetTable{
-  private targetTable: AppDatabase;
-  private targetCheckInTable: TargetCheckInTable | undefined;
+export default class TargetTable {
+  private static instance: TargetTable | null = null;
+  private targetTable: AppDatabase = new AppDatabase(
+    CommonConstants.TARGET_TABLE.tableName,
+    CommonConstants.TARGET_TABLE.sqlCreate,
+    CommonConstants.TARGET_TABLE.columns
+  );
+  private targetCheckInTable: TargetCheckInTable = TargetCheckInTable.getInstance(() => {
+    logger.info(CommonConstants.TARGET_TABLE_TAG, 'TargetCheckInTable initialized');
+  });
 
-  constructor(callback: Function = () => {
-  }) {
-    logger.info(CommonConstants.TARGET_TABLE_TAG, 'Initializing TargetTable');
-    this.targetTable = new AppDatabase(
-      CommonConstants.TARGET_TABLE.tableName,
-      CommonConstants.TARGET_TABLE.sqlCreate,
-      CommonConstants.TARGET_TABLE.columns
-    );
-
+  private constructor(callback: Function = () => {}) {
     this.targetTable.getRdbStore(() => {
       logger.info(CommonConstants.TARGET_TABLE_TAG, 'TargetTable initialized');
-      this.targetCheckInTable = new TargetCheckInTable(() => {
-        logger.info(CommonConstants.TARGET_TABLE_TAG, 'TargetCheckInTable initialized');
-        callback();
-      });
+      callback();
     });
   }
 
-  getRdbStore(callback: Function = () => {
-  }) {
+  public static getInstance(callback: Function = () => {}): TargetTable {
+    if (!TargetTable.instance) {
+      TargetTable.instance = new TargetTable(callback);
+    }
+    return TargetTable.instance;
+  }
+
+  getRdbStore(callback: Function = () => {}) {
     this.targetTable.getRdbStore(callback);
   }
+
   insertData(target: TargetData, callback: Function) {
     const valueBucket: relationalStore.ValuesBucket = generateBucket(target);
     this.targetTable.insertData(valueBucket, callback);
@@ -52,24 +55,22 @@ export default class TargetTable{
   }
 
   query(amount: number, callback: Function, isAll: boolean = true) {
-    // 创建查询条件对象
     let predicates = new relationalStore.RdbPredicates(CommonConstants.TARGET_TABLE.tableName);
-    // 根据是否查询所有数据设置查询条件
     if (!isAll) {
       predicates.equalTo('amount', amount);
     }
     this.targetTable.query(predicates, (resultSet: relationalStore.ResultSet) => {
       let count: number = resultSet.rowCount;
       if (count === 0 || typeof count === 'string') {
-        console.log(`${CommonConstants.TARGET_TABLE_TAG}` + 'Query no results!');
+        logger.info(CommonConstants.TARGET_TABLE_TAG, 'Query no results!');
         callback([]);
       } else {
         resultSet.goToFirstRow();
         const result: TargetData[] = [];
         for (let i = 0; i < count; i++) {
           let tmp: TargetData = {
-            id: -1, targetImg:'', targetTitle:'', targetContent:'', targetStatus:0,
-            targetStartTime:0, targetEndTime:0, targetIsRemind:false
+            id: -1, targetImg: '', targetTitle: '', targetContent: '', targetStatus: 0,
+            targetStartTime: 0, targetEndTime: 0, targetIsRemind: false
           };
           tmp.id = resultSet.getDouble(resultSet.getColumnIndex('id'));
           tmp.targetImg = resultSet.getString(resultSet.getColumnIndex('targetImg'));
@@ -78,8 +79,8 @@ export default class TargetTable{
           tmp.targetStatus = resultSet.getLong(resultSet.getColumnIndex('targetStatus'));
           tmp.targetStartTime = resultSet.getLong(resultSet.getColumnIndex('targetStartTime'));
           tmp.targetEndTime = resultSet.getLong(resultSet.getColumnIndex('targetEndTime'));
-          tmp.targetIsRemind = resultSet.getDouble(resultSet.getColumnIndex('targetIsRemind')) == 1 ? true : false;
-          result[i] = tmp;
+          tmp.targetIsRemind = resultSet.getDouble(resultSet.getColumnIndex('targetIsRemind')) == 1;
+          result.push(tmp);
           resultSet.goToNextRow();
         }
         callback(result);
@@ -95,7 +96,7 @@ export default class TargetTable{
     this.targetTable.query(predicates, (resultSet: relationalStore.ResultSet) => {
       let count: number = resultSet.rowCount;
       if (count === 0 || typeof count === 'string') {
-        console.log(`${CommonConstants.TARGET_TABLE_TAG}` + 'Query no results!');
+        logger.info(CommonConstants.TARGET_TABLE_TAG, 'Query no results!');
         callback([]);
       } else {
         try {
@@ -103,8 +104,8 @@ export default class TargetTable{
           const result: TargetDataWithCheckIn[] = [];
           for (let i = 0; i < count; i++) {
             let tmp: TargetData = {
-              id: -1, targetImg:'', targetTitle:'', targetContent:'', targetStatus:0,
-              targetStartTime:0, targetEndTime:0, targetIsRemind:false
+              id: -1, targetImg: '', targetTitle: '', targetContent: '', targetStatus: 0,
+              targetStartTime: 0, targetEndTime: 0, targetIsRemind: false
             };
             tmp.id = resultSet.getDouble(resultSet.getColumnIndex('id'));
             tmp.targetImg = resultSet.getString(resultSet.getColumnIndex('targetImg'));
@@ -113,27 +114,26 @@ export default class TargetTable{
             tmp.targetStatus = resultSet.getLong(resultSet.getColumnIndex('targetStatus'));
             tmp.targetStartTime = resultSet.getLong(resultSet.getColumnIndex('targetStartTime'));
             tmp.targetEndTime = resultSet.getLong(resultSet.getColumnIndex('targetEndTime'));
-            tmp.targetIsRemind = resultSet.getDouble(resultSet.getColumnIndex('targetIsRemind')) == 1 ? true : false;
+            tmp.targetIsRemind = resultSet.getDouble(resultSet.getColumnIndex('targetIsRemind')) == 1;
 
-            // 查询当天打卡状态
             if (this.targetCheckInTable) {
               this.targetCheckInTable.queryByTargetId(tmp.id, (checkInResultSet: relationalStore.ResultSet) => {
                 let checkInResults: TargetCheckInData[] = [];
-                if (checkInResultSet != null && checkInResultSet.rowCount > 0) {
-                  logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG, `打卡数据：${checkInResultSet.rowCount}}`);
+                if (checkInResultSet && checkInResultSet.rowCount > 0) {
+                  logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG, `Check-in data: ${checkInResultSet.rowCount}`);
                   checkInResultSet.goToFirstRow();
                   do {
                     let checkInData: TargetCheckInData = {
                       id: checkInResultSet.getDouble(checkInResultSet.getColumnIndex('id')),
                       targetId: checkInResultSet.getDouble(checkInResultSet.getColumnIndex('targetId')),
-                      targetCheckIn: checkInResultSet.getDouble(checkInResultSet.getColumnIndex('targetCheckIn')) == 1 ? true : false,
+                      targetCheckIn: checkInResultSet.getDouble(checkInResultSet.getColumnIndex('targetCheckIn')) == 1,
                       targetCheckInTime: checkInResultSet.getLong(checkInResultSet.getColumnIndex('targetCheckInTime')),
                       targetCancelCheckInTime: checkInResultSet.getLong(checkInResultSet.getColumnIndex('targetCancelCheckInTime'))
                     };
                     checkInResults.push(checkInData);
                   } while (checkInResultSet.goToNextRow());
                 } else {
-                  logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG, `打卡数据：null}`);
+                  logger.debug(CommonConstants.RUN_FAST_XM_DB_TAG, `Check-in data: null`);
                 }
 
                 let targetCheckInStatus = false;
@@ -147,7 +147,7 @@ export default class TargetTable{
                   targetCheckInStatus = !!todayCheckIn;
                 }
 
-                result[i] = new TargetDataWithCheckIn(tmp, targetCheckInStatus);
+                result.push(new TargetDataWithCheckIn(tmp, targetCheckInStatus));
                 if (i === count - 1) {
                   callback(result);
                 }
@@ -155,8 +155,8 @@ export default class TargetTable{
             }
             resultSet.goToNextRow();
           }
-        }catch (err){
-          logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `deleteData() failed, err: ${err}`);
+        } catch (err) {
+          logger.error(CommonConstants.RUN_FAST_XM_DB_TAG, `queryWithCheckInStatus() failed, err: ${err}`);
         }
       }
     });

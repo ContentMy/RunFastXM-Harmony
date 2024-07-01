@@ -8,7 +8,7 @@ import MemorandumImgTable from '../../common/database/tables/MemorandumImgTable'
 import { picker } from '@kit.CoreFileKit';
 import { BusinessError } from '@kit.BasicServicesKit'
 import MemorandumImgData from '../../common/database/data/MemorandumImgData'
-import { CommonConstants } from '../../common/contants/CommonConstants'
+import { CommonConstants } from '../../common/constants/CommonConstants'
 
 @Entry
 @Component
@@ -19,9 +19,9 @@ struct MemorandumCreate {
   @State memorandumContentValue:string = ''
   @State memorandumCreateTime:number = 0
   @State mMemorandumData:MemorandumData = new MemorandumData()
-  private MemorandumTable = new MemorandumTable(() => {});
+  private MemorandumTable = MemorandumTable.getInstance(() => {});
   @State imgPathList : string[] = []
-  private MemorandumImgTable = new MemorandumImgTable(() => {});
+  private MemorandumImgTable = MemorandumImgTable.getInstance(() => {});
   private maxImageCount: number = 9;
 
 

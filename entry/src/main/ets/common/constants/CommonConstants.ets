@@ -23,7 +23,7 @@ export class CommonConstants {
    * runfastxmdb database config.
    */
   static readonly STORE_CONFIG: relationalStore.StoreConfig = {
-    name: 'database.db',
+    name: 'runfastxm.db',
     securityLevel: relationalStore.SecurityLevel.S1
   };
 
@@ -49,7 +49,7 @@ export class CommonConstants {
     columns: ['id', 'targetImg', 'targetTitle', 'targetContent','targetStatus', 'targetStartTime', 'targetEndTime', 'targetIsRemind']
   };
 
-  static readonly TARGET_CHICK_IN_TABLE: DatabaseTable = {
+  static readonly TARGET_CHECK_IN_TABLE: DatabaseTable = {
     tableName: 'target_check_in_table',
     sqlCreate: 'CREATE TABLE IF NOT EXISTS target_check_in_table(id INTEGER PRIMARY KEY AUTOINCREMENT, targetId INTEGER, ' +
     'targetCheckIn INTEGER, targetCheckInTime INTEGER, targetCancelCheckInTime INTEGER)',

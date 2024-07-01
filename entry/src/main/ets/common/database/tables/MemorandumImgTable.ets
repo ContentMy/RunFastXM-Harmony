@@ -1,22 +1,32 @@
-
 import relationalStore from '@ohos.data.relationalStore';
-import { CommonConstants } from '../../contants/CommonConstants';
+import { CommonConstants } from '../../constants/CommonConstants';
 import AppDatabase from '../AppDatabase';
-import MemorandumData from '../data/MemorandumData';
 import MemorandumImgData from '../data/MemorandumImgData';
 
-export default class MemorandumImgTable{
-  private memorandumImgTable = new AppDatabase(CommonConstants.MEMORANDUM_IMG_TABLE.tableName, CommonConstants.MEMORANDUM_IMG_TABLE.sqlCreate,
-    CommonConstants.MEMORANDUM_IMG_TABLE.columns);
+export default class MemorandumImgTable {
+  private static instance: MemorandumImgTable;
+  private memorandumImgTable: AppDatabase;
 
-  constructor(callback: Function = () => {
-  }) {
+  private constructor(callback: Function = () => {}) {
+    this.memorandumImgTable = AppDatabase.getInstance(
+      CommonConstants.MEMORANDUM_IMG_TABLE.tableName,
+      CommonConstants.MEMORANDUM_IMG_TABLE.sqlCreate,
+      CommonConstants.MEMORANDUM_IMG_TABLE.columns
+    );
+
     this.memorandumImgTable.getRdbStore(callback);
   }
 
+  public static getInstance(callback: Function = () => {}): MemorandumImgTable {
+    if (!MemorandumImgTable.instance) {
+      MemorandumImgTable.instance = new MemorandumImgTable(callback);
+    } else {
+      callback();
+    }
+    return MemorandumImgTable.instance;
+  }
 
-  getRdbStore(callback: Function = () => {
-  }) {
+  getRdbStore(callback: Function = () => {}) {
     this.memorandumImgTable.getRdbStore(callback);
   }
 
@@ -43,7 +53,6 @@ export default class MemorandumImgTable{
     predicates.equalTo('memorandumId', memorandumId);
     this.memorandumImgTable.query(predicates, callback);
   }
-
 }
 
 function generateBucket(memorandumImg: MemorandumImgData): relationalStore.ValuesBucket {

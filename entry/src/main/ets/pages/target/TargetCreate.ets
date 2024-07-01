@@ -4,7 +4,7 @@ import TargetData from '../../common/database/data/TargetData'
 import TargetTable from '../../common/database/tables/TargetTable'
 import { logger } from '../../common/utils/logger'
 import { PageEventBus } from '../../common/utils/PageEventBus'
-import { CommonConstants } from '../../common/contants/CommonConstants'
+import { CommonConstants } from '../../common/constants/CommonConstants'
 
 @Entry
 @Component
@@ -25,7 +25,7 @@ struct TargetCreate {
   @State targetStatusArr:string[] = ['暂不设置','早晨','上午','中午','下午','晚上','深夜']
   @State chooseStatusIndex:number = 0
   @State mTargetData:TargetData = {id:0,targetImg:'',targetTitle:'',targetContent:'',targetStatus:0,targetStartTime:0,targetEndTime:0,targetIsRemind:false}
-  private TargetTable = new TargetTable(() => {});
+  private TargetTable = TargetTable.getInstance(() => {});
   @State isCreate:boolean = true;
 
 

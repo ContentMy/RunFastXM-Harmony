@@ -14,7 +14,7 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage) {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
-
+    //加载页面
     windowStage.loadContent('pages/Splash', (err, data) => {
       if (err.code) {
         hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
@@ -22,6 +22,7 @@ export default class EntryAbility extends UIAbility {
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
     });
+    //数据库相关初始化操作
   }
 
   onWindowStageDestroy() {
@@ -37,5 +38,14 @@ export default class EntryAbility extends UIAbility {
   onBackground() {
     // Ability has back to background
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
+  }
+
+
+  /**
+   * 初始化数据库和相关表格
+   * @param {Function} callback 初始化完成后的回调函数
+   */
+  initDatabaseAndTables(callback) {
+
   }
 }

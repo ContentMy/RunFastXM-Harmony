@@ -1,6 +1,5 @@
-
 import relationalStore from '@ohos.data.relationalStore';
-import { CommonConstants } from '../../contants/CommonConstants';
+import { CommonConstants } from '../../constants/CommonConstants';
 import { logger } from '../../utils/logger';
 import AppDatabase from '../AppDatabase';
 import MemorandumData from '../data/MemorandumData';
@@ -8,31 +7,32 @@ import MemorandumDataWithImg from '../data/MemorandumDataWithImg';
 import MemorandumImgData from '../data/MemorandumImgData';
 import MemorandumImgTable from './MemorandumImgTable';
 
-export default class MemorandumTable{
-  private memorandumTable: AppDatabase;
-  private memorandumImgTable: MemorandumImgTable | undefined;
+export default class MemorandumTable {
+  private static instance: MemorandumTable;
+  private memorandumTable: AppDatabase = new AppDatabase(
+    CommonConstants.MEMORANDUM_TABLE.tableName,
+    CommonConstants.MEMORANDUM_TABLE.sqlCreate,
+    CommonConstants.MEMORANDUM_TABLE.columns
+  );
+  private memorandumImgTable: MemorandumImgTable  = MemorandumImgTable.getInstance(()=>{})
 
-  constructor(callback: Function = () => {
-  }) {
-    logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'Initializing MemorandumTable');
-    this.memorandumTable = new AppDatabase(
-      CommonConstants.MEMORANDUM_TABLE.tableName,
-      CommonConstants.MEMORANDUM_TABLE.sqlCreate,
-      CommonConstants.MEMORANDUM_TABLE.columns
-    );
-
+  private constructor(callback: Function = () => {}) {
     this.memorandumTable.getRdbStore(() => {
       logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'MemorandumTable initialized');
-      this.memorandumImgTable = new MemorandumImgTable(() => {
-        logger.info(CommonConstants.RUN_FAST_XM_DB_TAG, 'MemorandumImgTable initialized');
-        callback();
-      });
+      callback()
     });
   }
 
+  public static getInstance(callback: Function = () => {}): MemorandumTable {
+    if (!MemorandumTable.instance) {
+      MemorandumTable.instance = new MemorandumTable(callback);
+    } else {
+      callback();
+    }
+    return MemorandumTable.instance;
+  }
 
-  getRdbStore(callback: Function = () => {
-  }) {
+  getRdbStore(callback: Function = () => {}) {
     this.memorandumTable.getRdbStore(callback);
   }
 
@@ -55,24 +55,23 @@ export default class MemorandumTable{
   }
 
   query(amount: number, callback: Function, isAll: boolean = true) {
-    // 创建查询条件对象
     let predicates = new relationalStore.RdbPredicates(CommonConstants.MEMORANDUM_TABLE.tableName);
-    // 根据是否查询所有数据设置查询条件
     if (!isAll) {
       predicates.equalTo('amount', amount);
     }
     this.memorandumTable.query(predicates, (resultSet: relationalStore.ResultSet) => {
       let count: number = resultSet.rowCount;
       if (count === 0 || typeof count === 'string') {
-        console.log(`${CommonConstants.MEMORANDUM_TABLE_TAG}` + 'Query no results!');
+        logger.info(`${CommonConstants.MEMORANDUM_TABLE_TAG} Query no results!`);
         callback([]);
       } else {
         resultSet.goToFirstRow();
         const result: MemorandumDataWithImg[] = [];
         for (let i = 0; i < count; i++) {
           let tmp: MemorandumData = {
-            id: 0, memorandumIcon:'', memorandumTitle:'', memorandumContent:'', memorandumCreateTime:0,
-            memorandumUpdateTime:0};
+            id: 0, memorandumIcon: '', memorandumTitle: '', memorandumContent: '', memorandumCreateTime: 0,
+            memorandumUpdateTime: 0
+          };
           tmp.id = resultSet.getDouble(resultSet.getColumnIndex('id'));
           tmp.memorandumIcon = resultSet.getString(resultSet.getColumnIndex('memorandumIcon'));
           tmp.memorandumTitle = resultSet.getString(resultSet.getColumnIndex('memorandumTitle'));
@@ -80,7 +79,6 @@ export default class MemorandumTable{
           tmp.memorandumCreateTime = resultSet.getLong(resultSet.getColumnIndex('memorandumCreateTime'));
           tmp.memorandumUpdateTime = resultSet.getLong(resultSet.getColumnIndex('memorandumUpdateTime'));
 
-          // 查询对应item的图片数据
           if (this.memorandumImgTable) {
             this.memorandumImgTable.query(tmp.id, (checkInResultSet: relationalStore.ResultSet) => {
               let checkInResults: string[] = [];
@@ -91,7 +89,7 @@ export default class MemorandumTable{
                   let checkInData: MemorandumImgData = {
                     id: checkInResultSet.getDouble(checkInResultSet.getColumnIndex('id')),
                     memorandumId: checkInResultSet.getDouble(checkInResultSet.getColumnIndex('memorandumId')),
-                    memorandumImgFilePath : checkInResultSet.getString(checkInResultSet.getColumnIndex('memorandumImgFilePath'))
+                    memorandumImgFilePath: checkInResultSet.getString(checkInResultSet.getColumnIndex('memorandumImgFilePath'))
                   };
                   checkInResults.push(checkInData.memorandumImgFilePath);
                 } while (checkInResultSet.goToNextRow());
@@ -107,11 +105,9 @@ export default class MemorandumTable{
           }
           resultSet.goToNextRow();
         }
-        callback(result);
       }
     });
   }
-
 }
 
 function generateBucket(memorandum: MemorandumData): relationalStore.ValuesBucket {

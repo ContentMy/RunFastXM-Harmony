@@ -1,6 +1,6 @@
 
 import router from '@ohos.router'
-import { CommonConstants } from '../common/contants/CommonConstants';
+import { CommonConstants } from '../common/constants/CommonConstants';
 import MemorandumData from '../common/database/data/MemorandumData';
 import MemorandumDataWithImg from '../common/database/data/MemorandumDataWithImg';
 import MemorandumTable from '../common/database/tables/MemorandumTable';
@@ -13,7 +13,7 @@ import { systemDateTime } from '@kit.BasicServicesKit';
 export struct MemorandumComp{
   @State mList:Array<MemorandumData> = []
   @State mMemorandumData:MemorandumData = {id:0,memorandumIcon:'',memorandumTitle:'',memorandumContent:'',memorandumCreateTime:0,memorandumUpdateTime:0}
-  private MemorandumTable = new MemorandumTable(() => {});
+  private MemorandumTable = MemorandumTable.getInstance(() => {});
   @State isLongClick:boolean = false;
   @State isShowDelete:boolean = false;
   private touchTime:number = 0
